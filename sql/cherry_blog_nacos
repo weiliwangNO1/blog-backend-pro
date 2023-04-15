@@ -1,0 +1,400 @@
+-- MySQL dump 10.13  Distrib 5.7.30, for Win64 (x86_64)
+--
+-- Host: 127.0.0.1    Database: nacos
+-- ------------------------------------------------------
+-- Server version	5.7.30
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `config_info`
+--
+
+DROP TABLE IF EXISTS `config_info`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `config_info` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `data_id` varchar(255) COLLATE utf8_bin NOT NULL COMMENT 'data_id',
+  `group_id` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `content` longtext COLLATE utf8_bin NOT NULL COMMENT 'content',
+  `md5` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT 'md5',
+  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+  `src_user` text COLLATE utf8_bin COMMENT 'source user',
+  `src_ip` varchar(50) COLLATE utf8_bin DEFAULT NULL COMMENT 'source ip',
+  `app_name` varchar(128) COLLATE utf8_bin DEFAULT NULL,
+  `tenant_id` varchar(128) COLLATE utf8_bin DEFAULT '' COMMENT '租户字段',
+  `c_desc` varchar(256) COLLATE utf8_bin DEFAULT NULL,
+  `c_use` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `effect` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `type` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `c_schema` text COLLATE utf8_bin,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_configinfo_datagrouptenant` (`data_id`,`group_id`,`tenant_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='config_info';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `config_info`
+--
+
+LOCK TABLES `config_info` WRITE;
+/*!40000 ALTER TABLE `config_info` DISABLE KEYS */;
+INSERT INTO `config_info` VALUES (2,'article-server-dev.yml','DEFAULT_GROUP','swagger:\r\n  title: 维利博客系统接口文档--开发环境\r\n  description: 维利博客系统-分类&标签&文章&广告管理接口\r\n  exclude-path: /error # 剔除请求\r\n\r\nserver:\r\n  port: 8001\r\n  servlet:\r\n    context-path: /article # 上下文件路径，请求前缀 ip:port/article\r\n\r\nspring:\r\n  application:\r\n    name: article-server # 应用名\r\n  # 数据源配置\r\n  datasource:\r\n    username: root\r\n    password: 1qaz2wsx!\r\n    url: jdbc:mysql://127.0.0.1:3306/mxg_blog_article?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true\r\n    #mysql8版本以上驱动包指定新的驱动类\r\n    driver-class-name: com.mysql.cj.jdbc.Driver\r\n    #   数据源其他配置, 在 DruidConfig配置类中手动绑定\r\n    initialSize: 8\r\n    minIdle: 5\r\n    maxActive: 20\r\n    maxWait: 60000\r\n    timeBetweenEvictionRunsMillis: 60000\r\n    minEvictableIdleTimeMillis: 300000\r\n    validationQuery: SELECT 1 FROM DUAL\r\n  cloud:\r\n    nacos:\r\n      discovery:\r\n        server-addr: localhost:8848  #nacos服务\r\n\r\nmybatis-plus:\r\n  type-aliases-package: com.mengxuegu.blog.entities\r\n  # xxxMapper.xml 路径\r\n  mapper-locations: classpath*:com/mengxuegu/blog/article/mapper/**/*.xml\r\n\r\n# 日志级别，会打印sql语句\r\nlogging:\r\n  level:\r\n    com.mengxuegu.blog.article.mapper: debug\r\n\r\n#阿里云OSS配置\r\nweili:\r\n  blog:\r\n  # 阿里云配置\r\n    aliyun:\r\n      endpoint: http://oss-cn-beijing.aliyuncs.com # OSS 端点，根据自己地域替换\r\n      accessKeyId: LTAI5tCBHXBfW1FuNwSAG4hZ # 根据自己的配置\r\n      accessKeySecret: QW517Vbo21mAIppKlb0ynRBLfOPLPT # 根据自己的配置\r\n      bucketName: weiliblog # 存储空间名称\r\n      # Bucket域名，访问文件时作为URL前缀，注意前面加上 https 和结尾加上 /\r\n      bucketDomain: https://weiliblog.oss-cn-beijing.aliyuncs.com/\r\n\r\n','45b720d4770553a81846f1ff9886c52e','2022-01-23 13:50:43','2022-01-23 13:50:43',NULL,'0:0:0:0:0:0:0:1','','','文章服务开发模块配置文件',NULL,NULL,'yaml',NULL),(3,'article-server-test.yml','DEFAULT_GROUP','swagger:\r\n  title: 维利博客系统接口文档--测试环境\r\n  description: 维利博客系统-分类&标签&文章&广告管理接口\r\n  exclude-path: /error # 剔除请求\r\n\r\nserver:\r\n  port: 8001\r\n  servlet:\r\n    context-path: /article # 上下文件路径，请求前缀 ip:port/article\r\n\r\nspring:\r\n  application:\r\n    name: article-server # 应用名\r\n  # 数据源配置\r\n  datasource:\r\n    username: root\r\n    password: 1qaz2wsx!\r\n    url: jdbc:mysql://127.0.0.1:3306/mxg_blog_article?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true\r\n    #mysql8版本以上驱动包指定新的驱动类\r\n    driver-class-name: com.mysql.cj.jdbc.Driver\r\n    #   数据源其他配置, 在 DruidConfig配置类中手动绑定\r\n    initialSize: 8\r\n    minIdle: 5\r\n    maxActive: 20\r\n    maxWait: 60000\r\n    timeBetweenEvictionRunsMillis: 60000\r\n    minEvictableIdleTimeMillis: 300000\r\n    validationQuery: SELECT 1 FROM DUAL\r\n  cloud:\r\n    nacos:\r\n      discovery:\r\n        server-addr: localhost:8848  #nacos服务\r\n\r\nmybatis-plus:\r\n  type-aliases-package: com.mengxuegu.blog.entities\r\n  # xxxMapper.xml 路径\r\n  mapper-locations: classpath*:com/mengxuegu/blog/article/mapper/**/*.xml\r\n\r\n# 日志级别，会打印sql语句\r\nlogging:\r\n  level:\r\n    com.mengxuegu.blog.article.mapper: debug\r\n\r\n#阿里云OSS配置\r\nweili:\r\n  blog:\r\n  # 阿里云配置\r\n    aliyun:\r\n      endpoint: http://oss-cn-beijing.aliyuncs.com # OSS 端点，根据自己地域替换\r\n      accessKeyId: LTAI5tCBHXBfW1FuNwSAG4hZ # 根据自己的配置\r\n      accessKeySecret: QW517Vbo21mAIppKlb0ynRBLfOPLPT # 根据自己的配置\r\n      bucketName: weiliblog # 存储空间名称\r\n      # Bucket域名，访问文件时作为URL前缀，注意前面加上 https 和结尾加上 /\r\n      bucketDomain: https://weiliblog.oss-cn-beijing.aliyuncs.com/\r\n\r\n','6290b0e8dee8e8d3c2c18b24c5ce415e','2022-01-23 13:51:40','2022-01-23 13:51:40',NULL,'0:0:0:0:0:0:0:1','','','文章模块测试配置文件',NULL,NULL,'yaml',NULL),(4,'article-server-prod.yml','DEFAULT_GROUP','swagger:\r\n  title: 维利博客系统接口文档--生产环境\r\n  description: 维利博客系统-分类&标签&文章&广告管理接口\r\n  exclude-path: /error # 剔除请求\r\n\r\nserver:\r\n  port: 8001\r\n  servlet:\r\n    context-path: /article # 上下文件路径，请求前缀 ip:port/article\r\n\r\nspring:\r\n  application:\r\n    name: article-server # 应用名\r\n  # 数据源配置\r\n  datasource:\r\n    username: root\r\n    password: 1qaz2wsx!\r\n    url: jdbc:mysql://127.0.0.1:3306/mxg_blog_article?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true\r\n    #mysql8版本以上驱动包指定新的驱动类\r\n    driver-class-name: com.mysql.cj.jdbc.Driver\r\n    #   数据源其他配置, 在 DruidConfig配置类中手动绑定\r\n    initialSize: 8\r\n    minIdle: 5\r\n    maxActive: 20\r\n    maxWait: 60000\r\n    timeBetweenEvictionRunsMillis: 60000\r\n    minEvictableIdleTimeMillis: 300000\r\n    validationQuery: SELECT 1 FROM DUAL\r\n  cloud:\r\n    nacos:\r\n      discovery:\r\n        server-addr: localhost:8848  #nacos服务\r\n\r\nmybatis-plus:\r\n  type-aliases-package: com.mengxuegu.blog.entities\r\n  # xxxMapper.xml 路径\r\n  mapper-locations: classpath*:com/mengxuegu/blog/article/mapper/**/*.xml\r\n\r\n# 日志级别，会打印sql语句\r\nlogging:\r\n  level:\r\n    com.mengxuegu.blog.article.mapper: debug\r\n\r\n#阿里云OSS配置\r\nweili:\r\n  blog:\r\n  # 阿里云配置\r\n    aliyun:\r\n      endpoint: http://oss-cn-beijing.aliyuncs.com # OSS 端点，根据自己地域替换\r\n      accessKeyId: LTAI5tCBHXBfW1FuNwSAG4hZ # 根据自己的配置\r\n      accessKeySecret: QW517Vbo21mAIppKlb0ynRBLfOPLPT # 根据自己的配置\r\n      bucketName: weiliblog # 存储空间名称\r\n      # Bucket域名，访问文件时作为URL前缀，注意前面加上 https 和结尾加上 /\r\n      bucketDomain: https://weiliblog.oss-cn-beijing.aliyuncs.com/\r\n\r\n','f6bf6c5bf2314386fccdfe0da6d458ff','2022-01-23 13:52:32','2022-01-23 13:52:32',NULL,'0:0:0:0:0:0:0:1','','','文章模块生产配置文件',NULL,NULL,'yaml',NULL),(5,'question-server-dev.yml','DEFAULT_GROUP','swagger:\r\n  title: 维利博客系统接口文档--开发环境\r\n  description: 维利博客系统-分类&标签&文章&广告管理接口\r\n  exclude-path: /error # 剔除请求\r\n\r\nserver:\r\n  port: 8002\r\n  servlet:\r\n    context-path: /question  # 上下文件路径，请求前缀 ip:port/question\r\n\r\nspring:\r\n  application:\r\n    name: question-server # 应用名\r\n  # 数据源配置\r\n  datasource:\r\n    username: root\r\n    password: 1qaz2wsx!\r\n    url: jdbc:mysql://127.0.0.1:3306/mxg_blog_question?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true\r\n    #mysql8版本以上驱动包指定新的驱动类\r\n    driver-class-name: com.mysql.cj.jdbc.Driver\r\n    #   数据源其他配置, 在 DruidConfig配置类中手动绑定\r\n    initialSize: 8\r\n    minIdle: 5\r\n    maxActive: 20\r\n    maxWait: 60000\r\n    timeBetweenEvictionRunsMillis: 60000\r\n    minEvictableIdleTimeMillis: 300000\r\n    validationQuery: SELECT 1 FROM DUAL\r\n  cloud:\r\n    nacos:\r\n      discovery:\r\n        server-addr: localhost:8848   #nacos服务\r\n\r\nmybatis-plus:\r\n  type-aliases-package: com.mengxuegu.blog.entities\r\n  # xxxMapper.xml 路径\r\n  mapper-locations: classpath*:com/mengxuegu/blog/question/mapper/**/*.xml\r\n\r\n# 日志级别，会打印sql语句\r\nlogging:\r\n  level:\r\n    com.mengxuegu.blog.question.mapper: debug\r\n\r\n#阿里云OSS配置\r\nweili:\r\n  blog:\r\n    # 阿里云配置\r\n    aliyun:\r\n      endpoint: http://oss-cn-beijing.aliyuncs.com # OSS 端点，根据自己地域替换\r\n      accessKeyId: LTAI5tCBHXBfW1FuNwSAG4hZ # 根据自己的配置\r\n      accessKeySecret: QW517Vbo21mAIppKlb0ynRBLfOPLPT # 根据自己的配置\r\n      bucketName: weiliblog # 存储空间名称\r\n      # Bucket域名，访问文件时作为URL前缀，注意前面加上 https 和结尾加上 /\r\n      bucketDomain: https://weiliblog.oss-cn-beijing.aliyuncs.com/','4d2b2b7ba57d971230443d996a255268','2022-01-23 13:55:42','2022-01-23 13:55:42',NULL,'0:0:0:0:0:0:0:1','','','问答模块开发环境配置文件',NULL,NULL,'yaml',NULL),(6,'question-server-test.yml','DEFAULT_GROUP','swagger:\r\n  title: 维利博客系统接口文档--测试环境\r\n  description: 维利博客系统-分类&标签&文章&广告管理接口\r\n  exclude-path: /error # 剔除请求\r\n\r\nserver:\r\n  port: 8002\r\n  servlet:\r\n    context-path: /question  # 上下文件路径，请求前缀 ip:port/question\r\n\r\nspring:\r\n  application:\r\n    name: question-server # 应用名\r\n  # 数据源配置\r\n  datasource:\r\n    username: root\r\n    password: 1qaz2wsx!\r\n    url: jdbc:mysql://127.0.0.1:3306/mxg_blog_question?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true\r\n    #mysql8版本以上驱动包指定新的驱动类\r\n    driver-class-name: com.mysql.cj.jdbc.Driver\r\n    #   数据源其他配置, 在 DruidConfig配置类中手动绑定\r\n    initialSize: 8\r\n    minIdle: 5\r\n    maxActive: 20\r\n    maxWait: 60000\r\n    timeBetweenEvictionRunsMillis: 60000\r\n    minEvictableIdleTimeMillis: 300000\r\n    validationQuery: SELECT 1 FROM DUAL\r\n  cloud:\r\n    nacos:\r\n      discovery:\r\n        server-addr: localhost:8848   #nacos服务\r\n\r\nmybatis-plus:\r\n  type-aliases-package: com.mengxuegu.blog.entities\r\n  # xxxMapper.xml 路径\r\n  mapper-locations: classpath*:com/mengxuegu/blog/question/mapper/**/*.xml\r\n\r\n# 日志级别，会打印sql语句\r\nlogging:\r\n  level:\r\n    com.mengxuegu.blog.question.mapper: debug\r\n\r\n#阿里云OSS配置\r\nweili:\r\n  blog:\r\n    # 阿里云配置\r\n    aliyun:\r\n      endpoint: http://oss-cn-beijing.aliyuncs.com # OSS 端点，根据自己地域替换\r\n      accessKeyId: LTAI5tCBHXBfW1FuNwSAG4hZ # 根据自己的配置\r\n      accessKeySecret: QW517Vbo21mAIppKlb0ynRBLfOPLPT # 根据自己的配置\r\n      bucketName: weiliblog # 存储空间名称\r\n      # Bucket域名，访问文件时作为URL前缀，注意前面加上 https 和结尾加上 /\r\n      bucketDomain: https://weiliblog.oss-cn-beijing.aliyuncs.com/','93b388b64bc4e32eec20311748268292','2022-01-23 13:56:27','2022-01-23 13:56:27',NULL,'0:0:0:0:0:0:0:1','','','问答模块测试环境配置文件',NULL,NULL,'yaml',NULL),(7,'question-server-prod.yml','DEFAULT_GROUP','swagger:\r\n  title: 维利博客系统接口文档--生产环境\r\n  description: 维利博客系统-分类&标签&文章&广告管理接口\r\n  exclude-path: /error # 剔除请求\r\n\r\nserver:\r\n  port: 8002\r\n  servlet:\r\n    context-path: /question  # 上下文件路径，请求前缀 ip:port/question\r\n\r\nspring:\r\n  application:\r\n    name: question-server # 应用名\r\n  # 数据源配置\r\n  datasource:\r\n    username: root\r\n    password: 1qaz2wsx!\r\n    url: jdbc:mysql://127.0.0.1:3306/mxg_blog_question?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true\r\n    #mysql8版本以上驱动包指定新的驱动类\r\n    driver-class-name: com.mysql.cj.jdbc.Driver\r\n    #   数据源其他配置, 在 DruidConfig配置类中手动绑定\r\n    initialSize: 8\r\n    minIdle: 5\r\n    maxActive: 20\r\n    maxWait: 60000\r\n    timeBetweenEvictionRunsMillis: 60000\r\n    minEvictableIdleTimeMillis: 300000\r\n    validationQuery: SELECT 1 FROM DUAL\r\n  cloud:\r\n    nacos:\r\n      discovery:\r\n        server-addr: localhost:8848   #nacos服务\r\n\r\nmybatis-plus:\r\n  type-aliases-package: com.mengxuegu.blog.entities\r\n  # xxxMapper.xml 路径\r\n  mapper-locations: classpath*:com/mengxuegu/blog/question/mapper/**/*.xml\r\n\r\n# 日志级别，会打印sql语句\r\nlogging:\r\n  level:\r\n    com.mengxuegu.blog.question.mapper: debug\r\n\r\n#阿里云OSS配置\r\nweili:\r\n  blog:\r\n    # 阿里云配置\r\n    aliyun:\r\n      endpoint: http://oss-cn-beijing.aliyuncs.com # OSS 端点，根据自己地域替换\r\n      accessKeyId: LTAI5tCBHXBfW1FuNwSAG4hZ # 根据自己的配置\r\n      accessKeySecret: QW517Vbo21mAIppKlb0ynRBLfOPLPT # 根据自己的配置\r\n      bucketName: weiliblog # 存储空间名称\r\n      # Bucket域名，访问文件时作为URL前缀，注意前面加上 https 和结尾加上 /\r\n      bucketDomain: https://weiliblog.oss-cn-beijing.aliyuncs.com/','8d9bb5e6f37af383cd86897ec06dd110','2022-01-23 13:57:09','2022-01-23 13:57:09',NULL,'0:0:0:0:0:0:0:1','','','问答模块生产环境配置文件',NULL,NULL,'yaml',NULL),(8,'system-server-dev.yml','DEFAULT_GROUP','swagger:\r\n  title: 维利客系统接口文档-开发环境\r\n  description: 维利博客系统—用户&角色&菜单接口\r\n  exclude-path: /error # 剔除请求\r\n  \r\nserver:\r\n  port: 8003\r\n  servlet:\r\n    context-path: /system\r\n\r\nspring:\r\n  application:\r\n    name: system-server # 应用名\r\n  # 数据源配置\r\n  datasource:\r\n    username: root\r\n    password: 1qaz2wsx!\r\n    url: jdbc:mysql://127.0.0.1:3306/mxg_blog_system?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true\r\n    #mysql8版本以上驱动包指定新的驱动类\r\n    driver-class-name: com.mysql.cj.jdbc.Driver\r\n    #   数据源其他配置, 在 DruidConfig配置类中手动绑定\r\n    initialSize: 8\r\n    minIdle: 5\r\n    maxActive: 20\r\n    maxWait: 60000\r\n    timeBetweenEvictionRunsMillis: 60000\r\n    minEvictableIdleTimeMillis: 300000\r\n    validationQuery: SELECT 1 FROM DUAL\r\n\r\nmybatis-plus:\r\n  type-aliases-package: com.mengxuegu.blog.entities\r\n  # xxxMapper.xml 路径\r\n  mapper-locations: classpath*:com/mengxuegu/blog/system/mapper/**/*.xml\r\n\r\n# 日志级别，会打印sql语句\r\nlogging:\r\n  level:\r\n    com.mengxuegu.blog.system.mapper: debug','0e624fbe06e68ada3a78abb4fa61e3a0','2022-01-25 07:29:06','2022-01-25 07:29:06',NULL,'0:0:0:0:0:0:0:1','','','系统管理配置-开发环境',NULL,NULL,'yaml',NULL),(9,'system-service-prod.yml','DEFAULT_GROUP','swagger:\r\n  title: 维利客系统接口文档-开发环境\r\n  description: 维利博客系统—用户&角色&菜单接口\r\n  exclude-path: /error # 剔除请求\r\n  \r\nserver:\r\n  port: 8003\r\n  servlet:\r\n    context-path: /system\r\n\r\nspring:\r\n  application:\r\n    name: system-server # 应用名\r\n  # 数据源配置\r\n  datasource:\r\n    username: root\r\n    password: 1qaz2wsx!\r\n    url: jdbc:mysql://127.0.0.1:3306/mxg_blog_system?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true\r\n    #mysql8版本以上驱动包指定新的驱动类\r\n    driver-class-name: com.mysql.cj.jdbc.Driver\r\n    #   数据源其他配置, 在 DruidConfig配置类中手动绑定\r\n    initialSize: 8\r\n    minIdle: 5\r\n    maxActive: 20\r\n    maxWait: 60000\r\n    timeBetweenEvictionRunsMillis: 60000\r\n    minEvictableIdleTimeMillis: 300000\r\n    validationQuery: SELECT 1 FROM DUAL\r\n\r\nmybatis-plus:\r\n  type-aliases-package: com.mengxuegu.blog.entities\r\n  # xxxMapper.xml 路径\r\n  mapper-locations: classpath*:com/mengxuegu/blog/system/mapper/**/*.xml\r\n\r\n# 日志级别，会打印sql语句\r\nlogging:\r\n  level:\r\n    com.mengxuegu.blog.system.mapper: debug','0e624fbe06e68ada3a78abb4fa61e3a0','2022-01-25 07:29:43','2022-01-25 07:29:43',NULL,'0:0:0:0:0:0:0:1','','','系统配置-生成环境',NULL,NULL,'yaml',NULL),(10,'system-service-test.yml','DEFAULT_GROUP','swagger:\r\n  title: 维利客系统接口文档-开发环境\r\n  description: 维利博客系统—用户&角色&菜单接口\r\n  exclude-path: /error # 剔除请求\r\n  \r\nserver:\r\n  port: 8003\r\n  servlet:\r\n    context-path: /system\r\n\r\nspring:\r\n  application:\r\n    name: system-server # 应用名\r\n  # 数据源配置\r\n  datasource:\r\n    username: root\r\n    password: 1qaz2wsx!\r\n    url: jdbc:mysql://127.0.0.1:3306/mxg_blog_system?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true\r\n    #mysql8版本以上驱动包指定新的驱动类\r\n    driver-class-name: com.mysql.cj.jdbc.Driver\r\n    #   数据源其他配置, 在 DruidConfig配置类中手动绑定\r\n    initialSize: 8\r\n    minIdle: 5\r\n    maxActive: 20\r\n    maxWait: 60000\r\n    timeBetweenEvictionRunsMillis: 60000\r\n    minEvictableIdleTimeMillis: 300000\r\n    validationQuery: SELECT 1 FROM DUAL\r\n\r\nmybatis-plus:\r\n  type-aliases-package: com.mengxuegu.blog.entities\r\n  # xxxMapper.xml 路径\r\n  mapper-locations: classpath*:com/mengxuegu/blog/system/mapper/**/*.xml\r\n\r\n# 日志级别，会打印sql语句\r\nlogging:\r\n  level:\r\n    com.mengxuegu.blog.system.mapper: debug','0e624fbe06e68ada3a78abb4fa61e3a0','2022-01-25 07:30:14','2022-01-25 07:30:14',NULL,'0:0:0:0:0:0:0:1','','','系统配置-测试环境',NULL,NULL,'yaml',NULL),(11,'auth-server-dev.yml','DEFAULT_GROUP','server:\n  port: 7001\n  servlet:\n    context-path: /auth #  localhost:7001/auth\n\nspring:\n  # 数据源配置\n  datasource:\n    username: root\n    password: 1qaz2wsx!\n    url: jdbc:mysql://127.0.0.1:3306/mxg_blog_auth?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true\n    #mysql8版本以上驱动包指定新的驱动类\n    driver-class-name: com.mysql.cj.jdbc.Driver\n    #   数据源其他配置, 在 DruidConfig配置类中手动绑定\n    initialSize: 8\n    minIdle: 5\n    maxActive: 20\n    maxWait: 60000\n    timeBetweenEvictionRunsMillis: 60000\n    minEvictableIdleTimeMillis: 300000\n    validationQuery: SELECT 1 FROM DUAL\n  # redis 配置\n  redis:\n    host: localhost # Redis服务器地址\n    port: 6379 # Redis服务器连接端口\n    password: # Redis服务器连接密码（默认为空）,redis 不需要用户名的\n','557eec755819c3effa82615d005b8d2a','2022-01-26 07:39:23','2022-01-26 09:24:30',NULL,'0:0:0:0:0:0:0:1','','','认证服务器配置-开发环境','','','yaml',''),(12,'auth-server-test.yml','DEFAULT_GROUP','server:\n  port: 7001\n  servlet:\n    context-path: /auth #  localhost:7001/auth\n\nspring:\n  # 数据源配置\n  datasource:\n    username: root\n    password: 1qaz2wsx!\n    url: jdbc:mysql://127.0.0.1:3306/mxg_blog_auth?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true\n    #mysql8版本以上驱动包指定新的驱动类\n    driver-class-name: com.mysql.cj.jdbc.Driver\n    #   数据源其他配置, 在 DruidConfig配置类中手动绑定\n    initialSize: 8\n    minIdle: 5\n    maxActive: 20\n    maxWait: 60000\n    timeBetweenEvictionRunsMillis: 60000\n    minEvictableIdleTimeMillis: 300000\n    validationQuery: SELECT 1 FROM DUAL\n  # redis 配置\n  redis:\n    host: localhost # Redis服务器地址\n    port: 6379 # Redis服务器连接端口\n    password: # Redis服务器连接密码（默认为空）,redis 不需要用户名的\n','557eec755819c3effa82615d005b8d2a','2022-01-26 07:40:00','2022-01-26 09:24:53',NULL,'0:0:0:0:0:0:0:1','','','认证服务器配置-测试环境','','','yaml',''),(16,'auth-server-prod.yml','DEFAULT_GROUP','server:\n  port: 7001\n  servlet:\n    context-path: /auth #  localhost:7001/auth\n\nspring:\n  # 数据源配置\n  datasource:\n    username: root\n    password: 1qaz2wsx!\n    url: jdbc:mysql://127.0.0.1:3306/mxg_blog_auth?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true\n    #mysql8版本以上驱动包指定新的驱动类\n    driver-class-name: com.mysql.cj.jdbc.Driver\n    #   数据源其他配置, 在 DruidConfig配置类中手动绑定\n    initialSize: 8\n    minIdle: 5\n    maxActive: 20\n    maxWait: 60000\n    timeBetweenEvictionRunsMillis: 60000\n    minEvictableIdleTimeMillis: 300000\n    validationQuery: SELECT 1 FROM DUAL\n  # redis 配置\n  redis:\n    host: localhost # Redis服务器地址\n    port: 6379 # Redis服务器连接端口\n    password: # Redis服务器连接密码（默认为空）,redis 不需要用户名的\n','557eec755819c3effa82615d005b8d2a','2022-01-26 07:41:05','2022-01-26 09:25:02',NULL,'0:0:0:0:0:0:0:1','','','认证服务器-生产环境','','','yaml',''),(20,'gateway-server-dev.yml','DEFAULT_GROUP','server:\r\n  port: 6001\r\n\r\nspring:\r\n  application:\r\n    name: gateway-server # 应用名\r\n    redis:\r\n      host: localhost # Redis服务器地址\r\n      port: 6379 # Redis服务器连接端口\r\n      # Redis服务器连接密码（默认为空），注释放到上面来，不然控制台可能会一直打印日志\r\n      password:\r\n  cloud:\r\n    nacos:\r\n      discovery:\r\n        server-addr: 127.0.0.1:8848 # 注册中心地址\r\n    gateway:\r\n      #      discovery:\r\n      #        locator:\r\n      #          # true 开启使用服务名称调用目标服务\r\n      #          enabled: true\r\n      # 路由（routes：路由，它由唯一标识（ID）、目标服务地址（uri）\r\n      # 、一组断言（predicates）和一组过滤器组成（filters）。filters 不是必需参数。）\r\n      routes: # List类型\r\n        # id：路由标识，具有唯一性\r\n        - id: blog-article\r\n          # 目标服务地址（uri：地址，请求转发后的地址\r\n          #uri: http://localhost:8001\r\n          uri: lb://article-server\r\n          # 目标服务地址 lb://目标服务名，会自动从注册中心获取此服务的ip和端口转发到 article-server 服务处理\r\n          #          uri: lb://article-service\r\n          # 路由条件（predicates：断言，匹配 HTTP 请求内容）\r\n          predicates:\r\n            # 匹配访问路径，格式为 uri/article/**\r\n            - Path=/article/**\r\n          filters:\r\n            #代理转发时去掉路径位数,发送请求 uri/str/article，/str 部分会被下面的过滤器给截取掉\r\n            #- StripPrefix=1\r\n            - name: RequestRateLimiter\r\n              args:\r\n                #限流过滤器的bean名称\r\n                key-resolver: \"#{@uriKeyResolver}\"\r\n                #希望允许用户每秒执行多少个请求，令牌桶的填充速率\r\n                redis-rate-limiter.replenishRate: 2\r\n                #允许用户在一秒内完成的最大请求数，令牌桶的最大容量\r\n                redis-rate-limiter.burstCapacity: 6\r\n\r\n        - id: blog-question # 问答微服务\r\n          #目标服务地址 lb://目标服务名，会自动从注册中心获取此服务的ip和端口转发到 question-server 服务处理\r\n          uri: lb://question-server\r\n          predicates:\r\n            - Path=/question/**\r\n          filters:\r\n            #代理转发时去掉路径位数,发送请求 uri/str/article，/str 部分会被下面的过滤器给截取掉\r\n            #- StripPrefix=1\r\n            - name: RequestRateLimiter\r\n              args:\r\n                #限流过滤器的bean名称\r\n                key-resolver: \"#{@uriKeyResolver}\"\r\n                #希望允许用户每秒执行多少个请求，令牌桶的填充速率\r\n                redis-rate-limiter.replenishRate: 2\r\n                #允许用户在一秒内完成的最大请求数，令牌桶的最大容量\r\n                redis-rate-limiter.burstCapacity: 6\r\n\r\n        - id: blog-system # 系统微服务\r\n          uri: lb://system-server\r\n          predicates:\r\n            - Path=/system/**\r\n          filters:\r\n            #代理转发时去掉路径位数,发送请求 uri/str/article，/str 部分会被下面的过滤器给截取掉\r\n            #- StripPrefix=1\r\n            - name: RequestRateLimiter\r\n              args:\r\n                #限流过滤器的bean名称\r\n                key-resolver: \"#{@uriKeyResolver}\"\r\n                #希望允许用户每秒执行多少个请求，令牌桶的填充速率\r\n                redis-rate-limiter.replenishRate: 2\r\n                #允许用户在一秒内完成的最大请求数，令牌桶的最大容量\r\n                redis-rate-limiter.burstCapacity: 6\r\n\r\n        - id: blog-auth # 认证服务器\r\n          uri: lb://auth-server\r\n          predicates:\r\n            - Path=/auth/**\r\n          filters:\r\n            #代理转发时去掉路径位数,发送请求 uri/str/article，/str 部分会被下面的过滤器给截取掉\r\n            #- StripPrefix=1\r\n            - name: RequestRateLimiter\r\n              args:\r\n                #限流过滤器的bean名称\r\n                key-resolver: \"#{@uriKeyResolver}\"\r\n                #希望允许用户每秒执行多少个请求，令牌桶的填充速率\r\n                redis-rate-limiter.replenishRate: 2\r\n                #允许用户在一秒内完成的最大请求数，令牌桶的最大容量\r\n                redis-rate-limiter.burstCapacity: 6','4815d8b958567eb90826527d4b3892c5','2022-01-27 09:33:43','2022-01-27 09:33:43',NULL,'0:0:0:0:0:0:0:1','','','路由网关配置-开发环境',NULL,NULL,'yaml',NULL),(21,'gateway-server-test.yml','DEFAULT_GROUP','server:\r\n  port: 6001\r\n\r\nspring:\r\n  application:\r\n    name: gateway-server # 应用名\r\n    redis:\r\n      host: localhost # Redis服务器地址\r\n      port: 6379 # Redis服务器连接端口\r\n      # Redis服务器连接密码（默认为空），注释放到上面来，不然控制台可能会一直打印日志\r\n      password:\r\n  cloud:\r\n    nacos:\r\n      discovery:\r\n        server-addr: 127.0.0.1:8848 # 注册中心地址\r\n    gateway:\r\n      #      discovery:\r\n      #        locator:\r\n      #          # true 开启使用服务名称调用目标服务\r\n      #          enabled: true\r\n      # 路由（routes：路由，它由唯一标识（ID）、目标服务地址（uri）\r\n      # 、一组断言（predicates）和一组过滤器组成（filters）。filters 不是必需参数。）\r\n      routes: # List类型\r\n        # id：路由标识，具有唯一性\r\n        - id: blog-article\r\n          # 目标服务地址（uri：地址，请求转发后的地址\r\n          #uri: http://localhost:8001\r\n          uri: lb://article-server\r\n          # 目标服务地址 lb://目标服务名，会自动从注册中心获取此服务的ip和端口转发到 article-server 服务处理\r\n          #          uri: lb://article-service\r\n          # 路由条件（predicates：断言，匹配 HTTP 请求内容）\r\n          predicates:\r\n            # 匹配访问路径，格式为 uri/article/**\r\n            - Path=/article/**\r\n          filters:\r\n            #代理转发时去掉路径位数,发送请求 uri/str/article，/str 部分会被下面的过滤器给截取掉\r\n            #- StripPrefix=1\r\n            - name: RequestRateLimiter\r\n              args:\r\n                #限流过滤器的bean名称\r\n                key-resolver: \"#{@uriKeyResolver}\"\r\n                #希望允许用户每秒执行多少个请求，令牌桶的填充速率\r\n                redis-rate-limiter.replenishRate: 2\r\n                #允许用户在一秒内完成的最大请求数，令牌桶的最大容量\r\n                redis-rate-limiter.burstCapacity: 6\r\n\r\n        - id: blog-question # 问答微服务\r\n          #目标服务地址 lb://目标服务名，会自动从注册中心获取此服务的ip和端口转发到 question-server 服务处理\r\n          uri: lb://question-server\r\n          predicates:\r\n            - Path=/question/**\r\n          filters:\r\n            #代理转发时去掉路径位数,发送请求 uri/str/article，/str 部分会被下面的过滤器给截取掉\r\n            #- StripPrefix=1\r\n            - name: RequestRateLimiter\r\n              args:\r\n                #限流过滤器的bean名称\r\n                key-resolver: \"#{@uriKeyResolver}\"\r\n                #希望允许用户每秒执行多少个请求，令牌桶的填充速率\r\n                redis-rate-limiter.replenishRate: 2\r\n                #允许用户在一秒内完成的最大请求数，令牌桶的最大容量\r\n                redis-rate-limiter.burstCapacity: 6\r\n\r\n        - id: blog-system # 系统微服务\r\n          uri: lb://system-server\r\n          predicates:\r\n            - Path=/system/**\r\n          filters:\r\n            #代理转发时去掉路径位数,发送请求 uri/str/article，/str 部分会被下面的过滤器给截取掉\r\n            #- StripPrefix=1\r\n            - name: RequestRateLimiter\r\n              args:\r\n                #限流过滤器的bean名称\r\n                key-resolver: \"#{@uriKeyResolver}\"\r\n                #希望允许用户每秒执行多少个请求，令牌桶的填充速率\r\n                redis-rate-limiter.replenishRate: 2\r\n                #允许用户在一秒内完成的最大请求数，令牌桶的最大容量\r\n                redis-rate-limiter.burstCapacity: 6\r\n\r\n        - id: blog-auth # 认证服务器\r\n          uri: lb://auth-server\r\n          predicates:\r\n            - Path=/auth/**\r\n          filters:\r\n            #代理转发时去掉路径位数,发送请求 uri/str/article，/str 部分会被下面的过滤器给截取掉\r\n            #- StripPrefix=1\r\n            - name: RequestRateLimiter\r\n              args:\r\n                #限流过滤器的bean名称\r\n                key-resolver: \"#{@uriKeyResolver}\"\r\n                #希望允许用户每秒执行多少个请求，令牌桶的填充速率\r\n                redis-rate-limiter.replenishRate: 2\r\n                #允许用户在一秒内完成的最大请求数，令牌桶的最大容量\r\n                redis-rate-limiter.burstCapacity: 6','4815d8b958567eb90826527d4b3892c5','2022-01-27 09:34:18','2022-01-27 09:34:18',NULL,'0:0:0:0:0:0:0:1','','','路由网关配置-测试环境',NULL,NULL,'yaml',NULL),(22,'gateway-server-prod.yml','DEFAULT_GROUP','server:\r\n  port: 6001\r\n\r\nspring:\r\n  application:\r\n    name: gateway-server # 应用名\r\n    redis:\r\n      host: localhost # Redis服务器地址\r\n      port: 6379 # Redis服务器连接端口\r\n      # Redis服务器连接密码（默认为空），注释放到上面来，不然控制台可能会一直打印日志\r\n      password:\r\n  cloud:\r\n    nacos:\r\n      discovery:\r\n        server-addr: 127.0.0.1:8848 # 注册中心地址\r\n    gateway:\r\n      #      discovery:\r\n      #        locator:\r\n      #          # true 开启使用服务名称调用目标服务\r\n      #          enabled: true\r\n      # 路由（routes：路由，它由唯一标识（ID）、目标服务地址（uri）\r\n      # 、一组断言（predicates）和一组过滤器组成（filters）。filters 不是必需参数。）\r\n      routes: # List类型\r\n        # id：路由标识，具有唯一性\r\n        - id: blog-article\r\n          # 目标服务地址（uri：地址，请求转发后的地址\r\n          #uri: http://localhost:8001\r\n          uri: lb://article-server\r\n          # 目标服务地址 lb://目标服务名，会自动从注册中心获取此服务的ip和端口转发到 article-server 服务处理\r\n          #          uri: lb://article-service\r\n          # 路由条件（predicates：断言，匹配 HTTP 请求内容）\r\n          predicates:\r\n            # 匹配访问路径，格式为 uri/article/**\r\n            - Path=/article/**\r\n          filters:\r\n            #代理转发时去掉路径位数,发送请求 uri/str/article，/str 部分会被下面的过滤器给截取掉\r\n            #- StripPrefix=1\r\n            - name: RequestRateLimiter\r\n              args:\r\n                #限流过滤器的bean名称\r\n                key-resolver: \"#{@uriKeyResolver}\"\r\n                #希望允许用户每秒执行多少个请求，令牌桶的填充速率\r\n                redis-rate-limiter.replenishRate: 2\r\n                #允许用户在一秒内完成的最大请求数，令牌桶的最大容量\r\n                redis-rate-limiter.burstCapacity: 6\r\n\r\n        - id: blog-question # 问答微服务\r\n          #目标服务地址 lb://目标服务名，会自动从注册中心获取此服务的ip和端口转发到 question-server 服务处理\r\n          uri: lb://question-server\r\n          predicates:\r\n            - Path=/question/**\r\n          filters:\r\n            #代理转发时去掉路径位数,发送请求 uri/str/article，/str 部分会被下面的过滤器给截取掉\r\n            #- StripPrefix=1\r\n            - name: RequestRateLimiter\r\n              args:\r\n                #限流过滤器的bean名称\r\n                key-resolver: \"#{@uriKeyResolver}\"\r\n                #希望允许用户每秒执行多少个请求，令牌桶的填充速率\r\n                redis-rate-limiter.replenishRate: 2\r\n                #允许用户在一秒内完成的最大请求数，令牌桶的最大容量\r\n                redis-rate-limiter.burstCapacity: 6\r\n\r\n        - id: blog-system # 系统微服务\r\n          uri: lb://system-server\r\n          predicates:\r\n            - Path=/system/**\r\n          filters:\r\n            #代理转发时去掉路径位数,发送请求 uri/str/article，/str 部分会被下面的过滤器给截取掉\r\n            #- StripPrefix=1\r\n            - name: RequestRateLimiter\r\n              args:\r\n                #限流过滤器的bean名称\r\n                key-resolver: \"#{@uriKeyResolver}\"\r\n                #希望允许用户每秒执行多少个请求，令牌桶的填充速率\r\n                redis-rate-limiter.replenishRate: 2\r\n                #允许用户在一秒内完成的最大请求数，令牌桶的最大容量\r\n                redis-rate-limiter.burstCapacity: 6\r\n\r\n        - id: blog-auth # 认证服务器\r\n          uri: lb://auth-server\r\n          predicates:\r\n            - Path=/auth/**\r\n          filters:\r\n            #代理转发时去掉路径位数,发送请求 uri/str/article，/str 部分会被下面的过滤器给截取掉\r\n            #- StripPrefix=1\r\n            - name: RequestRateLimiter\r\n              args:\r\n                #限流过滤器的bean名称\r\n                key-resolver: \"#{@uriKeyResolver}\"\r\n                #希望允许用户每秒执行多少个请求，令牌桶的填充速率\r\n                redis-rate-limiter.replenishRate: 2\r\n                #允许用户在一秒内完成的最大请求数，令牌桶的最大容量\r\n                redis-rate-limiter.burstCapacity: 6','4815d8b958567eb90826527d4b3892c5','2022-01-27 09:34:57','2022-01-27 09:34:57',NULL,'0:0:0:0:0:0:0:1','','','路由网关配置-生产环境',NULL,NULL,'yaml',NULL);
+/*!40000 ALTER TABLE `config_info` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `config_info_aggr`
+--
+
+DROP TABLE IF EXISTS `config_info_aggr`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `config_info_aggr` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `data_id` varchar(255) COLLATE utf8_bin NOT NULL COMMENT 'data_id',
+  `group_id` varchar(255) COLLATE utf8_bin NOT NULL COMMENT 'group_id',
+  `datum_id` varchar(255) COLLATE utf8_bin NOT NULL COMMENT 'datum_id',
+  `content` longtext COLLATE utf8_bin NOT NULL COMMENT '内容',
+  `gmt_modified` datetime NOT NULL COMMENT '修改时间',
+  `app_name` varchar(128) COLLATE utf8_bin DEFAULT NULL,
+  `tenant_id` varchar(128) COLLATE utf8_bin DEFAULT '' COMMENT '租户字段',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_configinfoaggr_datagrouptenantdatum` (`data_id`,`group_id`,`tenant_id`,`datum_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='增加租户字段';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `config_info_aggr`
+--
+
+LOCK TABLES `config_info_aggr` WRITE;
+/*!40000 ALTER TABLE `config_info_aggr` DISABLE KEYS */;
+/*!40000 ALTER TABLE `config_info_aggr` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `config_info_beta`
+--
+
+DROP TABLE IF EXISTS `config_info_beta`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `config_info_beta` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `data_id` varchar(255) COLLATE utf8_bin NOT NULL COMMENT 'data_id',
+  `group_id` varchar(128) COLLATE utf8_bin NOT NULL COMMENT 'group_id',
+  `app_name` varchar(128) COLLATE utf8_bin DEFAULT NULL COMMENT 'app_name',
+  `content` longtext COLLATE utf8_bin NOT NULL COMMENT 'content',
+  `beta_ips` varchar(1024) COLLATE utf8_bin DEFAULT NULL COMMENT 'betaIps',
+  `md5` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT 'md5',
+  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+  `src_user` text COLLATE utf8_bin COMMENT 'source user',
+  `src_ip` varchar(50) COLLATE utf8_bin DEFAULT NULL COMMENT 'source ip',
+  `tenant_id` varchar(128) COLLATE utf8_bin DEFAULT '' COMMENT '租户字段',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_configinfobeta_datagrouptenant` (`data_id`,`group_id`,`tenant_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='config_info_beta';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `config_info_beta`
+--
+
+LOCK TABLES `config_info_beta` WRITE;
+/*!40000 ALTER TABLE `config_info_beta` DISABLE KEYS */;
+/*!40000 ALTER TABLE `config_info_beta` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `config_info_tag`
+--
+
+DROP TABLE IF EXISTS `config_info_tag`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `config_info_tag` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `data_id` varchar(255) COLLATE utf8_bin NOT NULL COMMENT 'data_id',
+  `group_id` varchar(128) COLLATE utf8_bin NOT NULL COMMENT 'group_id',
+  `tenant_id` varchar(128) COLLATE utf8_bin DEFAULT '' COMMENT 'tenant_id',
+  `tag_id` varchar(128) COLLATE utf8_bin NOT NULL COMMENT 'tag_id',
+  `app_name` varchar(128) COLLATE utf8_bin DEFAULT NULL COMMENT 'app_name',
+  `content` longtext COLLATE utf8_bin NOT NULL COMMENT 'content',
+  `md5` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT 'md5',
+  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+  `src_user` text COLLATE utf8_bin COMMENT 'source user',
+  `src_ip` varchar(50) COLLATE utf8_bin DEFAULT NULL COMMENT 'source ip',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_configinfotag_datagrouptenanttag` (`data_id`,`group_id`,`tenant_id`,`tag_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='config_info_tag';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `config_info_tag`
+--
+
+LOCK TABLES `config_info_tag` WRITE;
+/*!40000 ALTER TABLE `config_info_tag` DISABLE KEYS */;
+/*!40000 ALTER TABLE `config_info_tag` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `config_tags_relation`
+--
+
+DROP TABLE IF EXISTS `config_tags_relation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `config_tags_relation` (
+  `id` bigint(20) NOT NULL COMMENT 'id',
+  `tag_name` varchar(128) COLLATE utf8_bin NOT NULL COMMENT 'tag_name',
+  `tag_type` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT 'tag_type',
+  `data_id` varchar(255) COLLATE utf8_bin NOT NULL COMMENT 'data_id',
+  `group_id` varchar(128) COLLATE utf8_bin NOT NULL COMMENT 'group_id',
+  `tenant_id` varchar(128) COLLATE utf8_bin DEFAULT '' COMMENT 'tenant_id',
+  `nid` bigint(20) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`nid`),
+  UNIQUE KEY `uk_configtagrelation_configidtag` (`id`,`tag_name`,`tag_type`),
+  KEY `idx_tenant_id` (`tenant_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='config_tag_relation';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `config_tags_relation`
+--
+
+LOCK TABLES `config_tags_relation` WRITE;
+/*!40000 ALTER TABLE `config_tags_relation` DISABLE KEYS */;
+/*!40000 ALTER TABLE `config_tags_relation` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `group_capacity`
+--
+
+DROP TABLE IF EXISTS `group_capacity`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `group_capacity` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `group_id` varchar(128) COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT 'Group ID，空字符表示整个集群',
+  `quota` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '配额，0表示使用默认值',
+  `usage` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '使用量',
+  `max_size` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '单个配置大小上限，单位为字节，0表示使用默认值',
+  `max_aggr_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '聚合子配置最大个数，，0表示使用默认值',
+  `max_aggr_size` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '单个聚合数据的子配置大小上限，单位为字节，0表示使用默认值',
+  `max_history_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最大变更历史数量',
+  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_group_id` (`group_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='集群、各Group容量信息表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `group_capacity`
+--
+
+LOCK TABLES `group_capacity` WRITE;
+/*!40000 ALTER TABLE `group_capacity` DISABLE KEYS */;
+/*!40000 ALTER TABLE `group_capacity` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `his_config_info`
+--
+
+DROP TABLE IF EXISTS `his_config_info`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `his_config_info` (
+  `id` bigint(64) unsigned NOT NULL,
+  `nid` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `data_id` varchar(255) COLLATE utf8_bin NOT NULL,
+  `group_id` varchar(128) COLLATE utf8_bin NOT NULL,
+  `app_name` varchar(128) COLLATE utf8_bin DEFAULT NULL COMMENT 'app_name',
+  `content` longtext COLLATE utf8_bin NOT NULL,
+  `md5` varchar(32) COLLATE utf8_bin DEFAULT NULL,
+  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `src_user` text COLLATE utf8_bin,
+  `src_ip` varchar(50) COLLATE utf8_bin DEFAULT NULL,
+  `op_type` char(10) COLLATE utf8_bin DEFAULT NULL,
+  `tenant_id` varchar(128) COLLATE utf8_bin DEFAULT '' COMMENT '租户字段',
+  PRIMARY KEY (`nid`),
+  KEY `idx_gmt_create` (`gmt_create`),
+  KEY `idx_gmt_modified` (`gmt_modified`),
+  KEY `idx_did` (`data_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='多租户改造';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `his_config_info`
+--
+
+LOCK TABLES `his_config_info` WRITE;
+/*!40000 ALTER TABLE `his_config_info` DISABLE KEYS */;
+INSERT INTO `his_config_info` VALUES (0,1,'article-server.yml','DEFAULT_GROUP','','user:\r\n  name: wangweili\r\n  age: 27','c122c035e8675b2b26952e8a1f0b53e8','2022-01-23 21:41:25','2022-01-23 13:41:25',NULL,'0:0:0:0:0:0:0:1','I',''),(1,2,'article-server.yml','DEFAULT_GROUP','','user:\r\n  name: wangweili\r\n  age: 27','c122c035e8675b2b26952e8a1f0b53e8','2022-01-23 21:49:29','2022-01-23 13:49:30',NULL,'0:0:0:0:0:0:0:1','D',''),(0,3,'article-server-dev.yml','DEFAULT_GROUP','','swagger:\r\n  title: 维利博客系统接口文档--开发环境\r\n  description: 维利博客系统-分类&标签&文章&广告管理接口\r\n  exclude-path: /error # 剔除请求\r\n\r\nserver:\r\n  port: 8001\r\n  servlet:\r\n    context-path: /article # 上下文件路径，请求前缀 ip:port/article\r\n\r\nspring:\r\n  application:\r\n    name: article-server # 应用名\r\n  # 数据源配置\r\n  datasource:\r\n    username: root\r\n    password: 1qaz2wsx!\r\n    url: jdbc:mysql://127.0.0.1:3306/mxg_blog_article?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true\r\n    #mysql8版本以上驱动包指定新的驱动类\r\n    driver-class-name: com.mysql.cj.jdbc.Driver\r\n    #   数据源其他配置, 在 DruidConfig配置类中手动绑定\r\n    initialSize: 8\r\n    minIdle: 5\r\n    maxActive: 20\r\n    maxWait: 60000\r\n    timeBetweenEvictionRunsMillis: 60000\r\n    minEvictableIdleTimeMillis: 300000\r\n    validationQuery: SELECT 1 FROM DUAL\r\n  cloud:\r\n    nacos:\r\n      discovery:\r\n        server-addr: localhost:8848  #nacos服务\r\n\r\nmybatis-plus:\r\n  type-aliases-package: com.mengxuegu.blog.entities\r\n  # xxxMapper.xml 路径\r\n  mapper-locations: classpath*:com/mengxuegu/blog/article/mapper/**/*.xml\r\n\r\n# 日志级别，会打印sql语句\r\nlogging:\r\n  level:\r\n    com.mengxuegu.blog.article.mapper: debug\r\n\r\n#阿里云OSS配置\r\nweili:\r\n  blog:\r\n  # 阿里云配置\r\n    aliyun:\r\n      endpoint: http://oss-cn-beijing.aliyuncs.com # OSS 端点，根据自己地域替换\r\n      accessKeyId: LTAI5tCBHXBfW1FuNwSAG4hZ # 根据自己的配置\r\n      accessKeySecret: QW517Vbo21mAIppKlb0ynRBLfOPLPT # 根据自己的配置\r\n      bucketName: weiliblog # 存储空间名称\r\n      # Bucket域名，访问文件时作为URL前缀，注意前面加上 https 和结尾加上 /\r\n      bucketDomain: https://weiliblog.oss-cn-beijing.aliyuncs.com/\r\n\r\n','45b720d4770553a81846f1ff9886c52e','2022-01-23 21:50:43','2022-01-23 13:50:43',NULL,'0:0:0:0:0:0:0:1','I',''),(0,4,'article-server-test.yml','DEFAULT_GROUP','','swagger:\r\n  title: 维利博客系统接口文档--测试环境\r\n  description: 维利博客系统-分类&标签&文章&广告管理接口\r\n  exclude-path: /error # 剔除请求\r\n\r\nserver:\r\n  port: 8001\r\n  servlet:\r\n    context-path: /article # 上下文件路径，请求前缀 ip:port/article\r\n\r\nspring:\r\n  application:\r\n    name: article-server # 应用名\r\n  # 数据源配置\r\n  datasource:\r\n    username: root\r\n    password: 1qaz2wsx!\r\n    url: jdbc:mysql://127.0.0.1:3306/mxg_blog_article?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true\r\n    #mysql8版本以上驱动包指定新的驱动类\r\n    driver-class-name: com.mysql.cj.jdbc.Driver\r\n    #   数据源其他配置, 在 DruidConfig配置类中手动绑定\r\n    initialSize: 8\r\n    minIdle: 5\r\n    maxActive: 20\r\n    maxWait: 60000\r\n    timeBetweenEvictionRunsMillis: 60000\r\n    minEvictableIdleTimeMillis: 300000\r\n    validationQuery: SELECT 1 FROM DUAL\r\n  cloud:\r\n    nacos:\r\n      discovery:\r\n        server-addr: localhost:8848  #nacos服务\r\n\r\nmybatis-plus:\r\n  type-aliases-package: com.mengxuegu.blog.entities\r\n  # xxxMapper.xml 路径\r\n  mapper-locations: classpath*:com/mengxuegu/blog/article/mapper/**/*.xml\r\n\r\n# 日志级别，会打印sql语句\r\nlogging:\r\n  level:\r\n    com.mengxuegu.blog.article.mapper: debug\r\n\r\n#阿里云OSS配置\r\nweili:\r\n  blog:\r\n  # 阿里云配置\r\n    aliyun:\r\n      endpoint: http://oss-cn-beijing.aliyuncs.com # OSS 端点，根据自己地域替换\r\n      accessKeyId: LTAI5tCBHXBfW1FuNwSAG4hZ # 根据自己的配置\r\n      accessKeySecret: QW517Vbo21mAIppKlb0ynRBLfOPLPT # 根据自己的配置\r\n      bucketName: weiliblog # 存储空间名称\r\n      # Bucket域名，访问文件时作为URL前缀，注意前面加上 https 和结尾加上 /\r\n      bucketDomain: https://weiliblog.oss-cn-beijing.aliyuncs.com/\r\n\r\n','6290b0e8dee8e8d3c2c18b24c5ce415e','2022-01-23 21:51:39','2022-01-23 13:51:40',NULL,'0:0:0:0:0:0:0:1','I',''),(0,5,'article-server-prod.yml','DEFAULT_GROUP','','swagger:\r\n  title: 维利博客系统接口文档--生产环境\r\n  description: 维利博客系统-分类&标签&文章&广告管理接口\r\n  exclude-path: /error # 剔除请求\r\n\r\nserver:\r\n  port: 8001\r\n  servlet:\r\n    context-path: /article # 上下文件路径，请求前缀 ip:port/article\r\n\r\nspring:\r\n  application:\r\n    name: article-server # 应用名\r\n  # 数据源配置\r\n  datasource:\r\n    username: root\r\n    password: 1qaz2wsx!\r\n    url: jdbc:mysql://127.0.0.1:3306/mxg_blog_article?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true\r\n    #mysql8版本以上驱动包指定新的驱动类\r\n    driver-class-name: com.mysql.cj.jdbc.Driver\r\n    #   数据源其他配置, 在 DruidConfig配置类中手动绑定\r\n    initialSize: 8\r\n    minIdle: 5\r\n    maxActive: 20\r\n    maxWait: 60000\r\n    timeBetweenEvictionRunsMillis: 60000\r\n    minEvictableIdleTimeMillis: 300000\r\n    validationQuery: SELECT 1 FROM DUAL\r\n  cloud:\r\n    nacos:\r\n      discovery:\r\n        server-addr: localhost:8848  #nacos服务\r\n\r\nmybatis-plus:\r\n  type-aliases-package: com.mengxuegu.blog.entities\r\n  # xxxMapper.xml 路径\r\n  mapper-locations: classpath*:com/mengxuegu/blog/article/mapper/**/*.xml\r\n\r\n# 日志级别，会打印sql语句\r\nlogging:\r\n  level:\r\n    com.mengxuegu.blog.article.mapper: debug\r\n\r\n#阿里云OSS配置\r\nweili:\r\n  blog:\r\n  # 阿里云配置\r\n    aliyun:\r\n      endpoint: http://oss-cn-beijing.aliyuncs.com # OSS 端点，根据自己地域替换\r\n      accessKeyId: LTAI5tCBHXBfW1FuNwSAG4hZ # 根据自己的配置\r\n      accessKeySecret: QW517Vbo21mAIppKlb0ynRBLfOPLPT # 根据自己的配置\r\n      bucketName: weiliblog # 存储空间名称\r\n      # Bucket域名，访问文件时作为URL前缀，注意前面加上 https 和结尾加上 /\r\n      bucketDomain: https://weiliblog.oss-cn-beijing.aliyuncs.com/\r\n\r\n','f6bf6c5bf2314386fccdfe0da6d458ff','2022-01-23 21:52:32','2022-01-23 13:52:32',NULL,'0:0:0:0:0:0:0:1','I',''),(0,6,'question-server-dev.yml','DEFAULT_GROUP','','swagger:\r\n  title: 维利博客系统接口文档--开发环境\r\n  description: 维利博客系统-分类&标签&文章&广告管理接口\r\n  exclude-path: /error # 剔除请求\r\n\r\nserver:\r\n  port: 8002\r\n  servlet:\r\n    context-path: /question  # 上下文件路径，请求前缀 ip:port/question\r\n\r\nspring:\r\n  application:\r\n    name: question-server # 应用名\r\n  # 数据源配置\r\n  datasource:\r\n    username: root\r\n    password: 1qaz2wsx!\r\n    url: jdbc:mysql://127.0.0.1:3306/mxg_blog_question?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true\r\n    #mysql8版本以上驱动包指定新的驱动类\r\n    driver-class-name: com.mysql.cj.jdbc.Driver\r\n    #   数据源其他配置, 在 DruidConfig配置类中手动绑定\r\n    initialSize: 8\r\n    minIdle: 5\r\n    maxActive: 20\r\n    maxWait: 60000\r\n    timeBetweenEvictionRunsMillis: 60000\r\n    minEvictableIdleTimeMillis: 300000\r\n    validationQuery: SELECT 1 FROM DUAL\r\n  cloud:\r\n    nacos:\r\n      discovery:\r\n        server-addr: localhost:8848   #nacos服务\r\n\r\nmybatis-plus:\r\n  type-aliases-package: com.mengxuegu.blog.entities\r\n  # xxxMapper.xml 路径\r\n  mapper-locations: classpath*:com/mengxuegu/blog/question/mapper/**/*.xml\r\n\r\n# 日志级别，会打印sql语句\r\nlogging:\r\n  level:\r\n    com.mengxuegu.blog.question.mapper: debug\r\n\r\n#阿里云OSS配置\r\nweili:\r\n  blog:\r\n    # 阿里云配置\r\n    aliyun:\r\n      endpoint: http://oss-cn-beijing.aliyuncs.com # OSS 端点，根据自己地域替换\r\n      accessKeyId: LTAI5tCBHXBfW1FuNwSAG4hZ # 根据自己的配置\r\n      accessKeySecret: QW517Vbo21mAIppKlb0ynRBLfOPLPT # 根据自己的配置\r\n      bucketName: weiliblog # 存储空间名称\r\n      # Bucket域名，访问文件时作为URL前缀，注意前面加上 https 和结尾加上 /\r\n      bucketDomain: https://weiliblog.oss-cn-beijing.aliyuncs.com/','4d2b2b7ba57d971230443d996a255268','2022-01-23 21:55:42','2022-01-23 13:55:42',NULL,'0:0:0:0:0:0:0:1','I',''),(0,7,'question-server-test.yml','DEFAULT_GROUP','','swagger:\r\n  title: 维利博客系统接口文档--测试环境\r\n  description: 维利博客系统-分类&标签&文章&广告管理接口\r\n  exclude-path: /error # 剔除请求\r\n\r\nserver:\r\n  port: 8002\r\n  servlet:\r\n    context-path: /question  # 上下文件路径，请求前缀 ip:port/question\r\n\r\nspring:\r\n  application:\r\n    name: question-server # 应用名\r\n  # 数据源配置\r\n  datasource:\r\n    username: root\r\n    password: 1qaz2wsx!\r\n    url: jdbc:mysql://127.0.0.1:3306/mxg_blog_question?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true\r\n    #mysql8版本以上驱动包指定新的驱动类\r\n    driver-class-name: com.mysql.cj.jdbc.Driver\r\n    #   数据源其他配置, 在 DruidConfig配置类中手动绑定\r\n    initialSize: 8\r\n    minIdle: 5\r\n    maxActive: 20\r\n    maxWait: 60000\r\n    timeBetweenEvictionRunsMillis: 60000\r\n    minEvictableIdleTimeMillis: 300000\r\n    validationQuery: SELECT 1 FROM DUAL\r\n  cloud:\r\n    nacos:\r\n      discovery:\r\n        server-addr: localhost:8848   #nacos服务\r\n\r\nmybatis-plus:\r\n  type-aliases-package: com.mengxuegu.blog.entities\r\n  # xxxMapper.xml 路径\r\n  mapper-locations: classpath*:com/mengxuegu/blog/question/mapper/**/*.xml\r\n\r\n# 日志级别，会打印sql语句\r\nlogging:\r\n  level:\r\n    com.mengxuegu.blog.question.mapper: debug\r\n\r\n#阿里云OSS配置\r\nweili:\r\n  blog:\r\n    # 阿里云配置\r\n    aliyun:\r\n      endpoint: http://oss-cn-beijing.aliyuncs.com # OSS 端点，根据自己地域替换\r\n      accessKeyId: LTAI5tCBHXBfW1FuNwSAG4hZ # 根据自己的配置\r\n      accessKeySecret: QW517Vbo21mAIppKlb0ynRBLfOPLPT # 根据自己的配置\r\n      bucketName: weiliblog # 存储空间名称\r\n      # Bucket域名，访问文件时作为URL前缀，注意前面加上 https 和结尾加上 /\r\n      bucketDomain: https://weiliblog.oss-cn-beijing.aliyuncs.com/','93b388b64bc4e32eec20311748268292','2022-01-23 21:56:27','2022-01-23 13:56:27',NULL,'0:0:0:0:0:0:0:1','I',''),(0,8,'question-server-prod.yml','DEFAULT_GROUP','','swagger:\r\n  title: 维利博客系统接口文档--生产环境\r\n  description: 维利博客系统-分类&标签&文章&广告管理接口\r\n  exclude-path: /error # 剔除请求\r\n\r\nserver:\r\n  port: 8002\r\n  servlet:\r\n    context-path: /question  # 上下文件路径，请求前缀 ip:port/question\r\n\r\nspring:\r\n  application:\r\n    name: question-server # 应用名\r\n  # 数据源配置\r\n  datasource:\r\n    username: root\r\n    password: 1qaz2wsx!\r\n    url: jdbc:mysql://127.0.0.1:3306/mxg_blog_question?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true\r\n    #mysql8版本以上驱动包指定新的驱动类\r\n    driver-class-name: com.mysql.cj.jdbc.Driver\r\n    #   数据源其他配置, 在 DruidConfig配置类中手动绑定\r\n    initialSize: 8\r\n    minIdle: 5\r\n    maxActive: 20\r\n    maxWait: 60000\r\n    timeBetweenEvictionRunsMillis: 60000\r\n    minEvictableIdleTimeMillis: 300000\r\n    validationQuery: SELECT 1 FROM DUAL\r\n  cloud:\r\n    nacos:\r\n      discovery:\r\n        server-addr: localhost:8848   #nacos服务\r\n\r\nmybatis-plus:\r\n  type-aliases-package: com.mengxuegu.blog.entities\r\n  # xxxMapper.xml 路径\r\n  mapper-locations: classpath*:com/mengxuegu/blog/question/mapper/**/*.xml\r\n\r\n# 日志级别，会打印sql语句\r\nlogging:\r\n  level:\r\n    com.mengxuegu.blog.question.mapper: debug\r\n\r\n#阿里云OSS配置\r\nweili:\r\n  blog:\r\n    # 阿里云配置\r\n    aliyun:\r\n      endpoint: http://oss-cn-beijing.aliyuncs.com # OSS 端点，根据自己地域替换\r\n      accessKeyId: LTAI5tCBHXBfW1FuNwSAG4hZ # 根据自己的配置\r\n      accessKeySecret: QW517Vbo21mAIppKlb0ynRBLfOPLPT # 根据自己的配置\r\n      bucketName: weiliblog # 存储空间名称\r\n      # Bucket域名，访问文件时作为URL前缀，注意前面加上 https 和结尾加上 /\r\n      bucketDomain: https://weiliblog.oss-cn-beijing.aliyuncs.com/','8d9bb5e6f37af383cd86897ec06dd110','2022-01-23 21:57:09','2022-01-23 13:57:09',NULL,'0:0:0:0:0:0:0:1','I',''),(0,9,'system-server-dev.yml','DEFAULT_GROUP','','swagger:\r\n  title: 维利客系统接口文档-开发环境\r\n  description: 维利博客系统—用户&角色&菜单接口\r\n  exclude-path: /error # 剔除请求\r\n  \r\nserver:\r\n  port: 8003\r\n  servlet:\r\n    context-path: /system\r\n\r\nspring:\r\n  application:\r\n    name: system-server # 应用名\r\n  # 数据源配置\r\n  datasource:\r\n    username: root\r\n    password: 1qaz2wsx!\r\n    url: jdbc:mysql://127.0.0.1:3306/mxg_blog_system?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true\r\n    #mysql8版本以上驱动包指定新的驱动类\r\n    driver-class-name: com.mysql.cj.jdbc.Driver\r\n    #   数据源其他配置, 在 DruidConfig配置类中手动绑定\r\n    initialSize: 8\r\n    minIdle: 5\r\n    maxActive: 20\r\n    maxWait: 60000\r\n    timeBetweenEvictionRunsMillis: 60000\r\n    minEvictableIdleTimeMillis: 300000\r\n    validationQuery: SELECT 1 FROM DUAL\r\n\r\nmybatis-plus:\r\n  type-aliases-package: com.mengxuegu.blog.entities\r\n  # xxxMapper.xml 路径\r\n  mapper-locations: classpath*:com/mengxuegu/blog/system/mapper/**/*.xml\r\n\r\n# 日志级别，会打印sql语句\r\nlogging:\r\n  level:\r\n    com.mengxuegu.blog.system.mapper: debug','0e624fbe06e68ada3a78abb4fa61e3a0','2022-01-25 15:29:05','2022-01-25 07:29:06',NULL,'0:0:0:0:0:0:0:1','I',''),(0,10,'system-service-prod.yml','DEFAULT_GROUP','','swagger:\r\n  title: 维利客系统接口文档-开发环境\r\n  description: 维利博客系统—用户&角色&菜单接口\r\n  exclude-path: /error # 剔除请求\r\n  \r\nserver:\r\n  port: 8003\r\n  servlet:\r\n    context-path: /system\r\n\r\nspring:\r\n  application:\r\n    name: system-server # 应用名\r\n  # 数据源配置\r\n  datasource:\r\n    username: root\r\n    password: 1qaz2wsx!\r\n    url: jdbc:mysql://127.0.0.1:3306/mxg_blog_system?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true\r\n    #mysql8版本以上驱动包指定新的驱动类\r\n    driver-class-name: com.mysql.cj.jdbc.Driver\r\n    #   数据源其他配置, 在 DruidConfig配置类中手动绑定\r\n    initialSize: 8\r\n    minIdle: 5\r\n    maxActive: 20\r\n    maxWait: 60000\r\n    timeBetweenEvictionRunsMillis: 60000\r\n    minEvictableIdleTimeMillis: 300000\r\n    validationQuery: SELECT 1 FROM DUAL\r\n\r\nmybatis-plus:\r\n  type-aliases-package: com.mengxuegu.blog.entities\r\n  # xxxMapper.xml 路径\r\n  mapper-locations: classpath*:com/mengxuegu/blog/system/mapper/**/*.xml\r\n\r\n# 日志级别，会打印sql语句\r\nlogging:\r\n  level:\r\n    com.mengxuegu.blog.system.mapper: debug','0e624fbe06e68ada3a78abb4fa61e3a0','2022-01-25 15:29:43','2022-01-25 07:29:43',NULL,'0:0:0:0:0:0:0:1','I',''),(0,11,'system-service-test.yml','DEFAULT_GROUP','','swagger:\r\n  title: 维利客系统接口文档-开发环境\r\n  description: 维利博客系统—用户&角色&菜单接口\r\n  exclude-path: /error # 剔除请求\r\n  \r\nserver:\r\n  port: 8003\r\n  servlet:\r\n    context-path: /system\r\n\r\nspring:\r\n  application:\r\n    name: system-server # 应用名\r\n  # 数据源配置\r\n  datasource:\r\n    username: root\r\n    password: 1qaz2wsx!\r\n    url: jdbc:mysql://127.0.0.1:3306/mxg_blog_system?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true\r\n    #mysql8版本以上驱动包指定新的驱动类\r\n    driver-class-name: com.mysql.cj.jdbc.Driver\r\n    #   数据源其他配置, 在 DruidConfig配置类中手动绑定\r\n    initialSize: 8\r\n    minIdle: 5\r\n    maxActive: 20\r\n    maxWait: 60000\r\n    timeBetweenEvictionRunsMillis: 60000\r\n    minEvictableIdleTimeMillis: 300000\r\n    validationQuery: SELECT 1 FROM DUAL\r\n\r\nmybatis-plus:\r\n  type-aliases-package: com.mengxuegu.blog.entities\r\n  # xxxMapper.xml 路径\r\n  mapper-locations: classpath*:com/mengxuegu/blog/system/mapper/**/*.xml\r\n\r\n# 日志级别，会打印sql语句\r\nlogging:\r\n  level:\r\n    com.mengxuegu.blog.system.mapper: debug','0e624fbe06e68ada3a78abb4fa61e3a0','2022-01-25 15:30:14','2022-01-25 07:30:14',NULL,'0:0:0:0:0:0:0:1','I',''),(0,12,'auth-server-dev.yml','DEFAULT_GROUP','','server:\r\n  port: 7001\r\n  servlet:\r\n    context-path: /auth #  localhost:7001/auth\r\n\r\nspring:\r\n  # 数据源配置\r\n  datasource:\r\n    username: root\r\n    password: 1qaz2wsx!\r\n    url: jdbc:mysql://127.0.0.1:3306/mxg_blog_auth?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true\r\n    #mysql8版本以上驱动包指定新的驱动类\r\n    driver-class-name: com.mysql.cj.jdbc.Driver\r\n    #   数据源其他配置, 在 DruidConfig配置类中手动绑定\r\n    initialSize: 8\r\n    minIdle: 5\r\n    maxActive: 20\r\n    maxWait: 60000\r\n    timeBetweenEvictionRunsMillis: 60000\r\n    minEvictableIdleTimeMillis: 300000\r\n    validationQuery: SELECT 1 FROM DUAL','cc14c442813b1adaaaa31660c0d1233f','2022-01-26 15:39:23','2022-01-26 07:39:23',NULL,'0:0:0:0:0:0:0:1','I',''),(0,13,'auth-server-test.yml','DEFAULT_GROUP','','server:\r\n  port: 7001\r\n  servlet:\r\n    context-path: /auth #  localhost:7001/auth\r\n\r\nspring:\r\n  # 数据源配置\r\n  datasource:\r\n    username: root\r\n    password: 1qaz2wsx!\r\n    url: jdbc:mysql://127.0.0.1:3306/mxg_blog_auth?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true\r\n    #mysql8版本以上驱动包指定新的驱动类\r\n    driver-class-name: com.mysql.cj.jdbc.Driver\r\n    #   数据源其他配置, 在 DruidConfig配置类中手动绑定\r\n    initialSize: 8\r\n    minIdle: 5\r\n    maxActive: 20\r\n    maxWait: 60000\r\n    timeBetweenEvictionRunsMillis: 60000\r\n    minEvictableIdleTimeMillis: 300000\r\n    validationQuery: SELECT 1 FROM DUAL','cc14c442813b1adaaaa31660c0d1233f','2022-01-26 15:40:00','2022-01-26 07:40:00',NULL,'0:0:0:0:0:0:0:1','I',''),(11,14,'auth-server-dev.yml','DEFAULT_GROUP','','server:\r\n  port: 7001\r\n  servlet:\r\n    context-path: /auth #  localhost:7001/auth\r\n\r\nspring:\r\n  # 数据源配置\r\n  datasource:\r\n    username: root\r\n    password: 1qaz2wsx!\r\n    url: jdbc:mysql://127.0.0.1:3306/mxg_blog_auth?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true\r\n    #mysql8版本以上驱动包指定新的驱动类\r\n    driver-class-name: com.mysql.cj.jdbc.Driver\r\n    #   数据源其他配置, 在 DruidConfig配置类中手动绑定\r\n    initialSize: 8\r\n    minIdle: 5\r\n    maxActive: 20\r\n    maxWait: 60000\r\n    timeBetweenEvictionRunsMillis: 60000\r\n    minEvictableIdleTimeMillis: 300000\r\n    validationQuery: SELECT 1 FROM DUAL','cc14c442813b1adaaaa31660c0d1233f','2022-01-26 15:40:21','2022-01-26 07:40:21',NULL,'0:0:0:0:0:0:0:1','U',''),(11,15,'auth-server-dev.yml','DEFAULT_GROUP','','server:\n  port: 7001\n  servlet:\n    context-path: /auth #  localhost:7001/auth\n\nspring:\n  # 数据源配置\n  datasource:\n    username: root\n    password: 1qaz2wsx!\n    url: jdbc:mysql://127.0.0.1:3306/mxg_blog_auth?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true\n    #mysql8版本以上驱动包指定新的驱动类\n    driver-class-name: com.mysql.cj.jdbc.Driver\n    #   数据源其他配置, 在 DruidConfig配置类中手动绑定\n    initialSize: 8\n    minIdle: 5\n    maxActive: 20\n    maxWait: 60000\n    timeBetweenEvictionRunsMillis: 60000\n    minEvictableIdleTimeMillis: 300000\n    validationQuery: SELECT 1 FROM DUAL','15e187be1c21ab2ecfd2503d4c1335db','2022-01-26 15:40:26','2022-01-26 07:40:26',NULL,'0:0:0:0:0:0:0:1','U',''),(12,16,'auth-server-test.yml','DEFAULT_GROUP','','server:\r\n  port: 7001\r\n  servlet:\r\n    context-path: /auth #  localhost:7001/auth\r\n\r\nspring:\r\n  # 数据源配置\r\n  datasource:\r\n    username: root\r\n    password: 1qaz2wsx!\r\n    url: jdbc:mysql://127.0.0.1:3306/mxg_blog_auth?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true\r\n    #mysql8版本以上驱动包指定新的驱动类\r\n    driver-class-name: com.mysql.cj.jdbc.Driver\r\n    #   数据源其他配置, 在 DruidConfig配置类中手动绑定\r\n    initialSize: 8\r\n    minIdle: 5\r\n    maxActive: 20\r\n    maxWait: 60000\r\n    timeBetweenEvictionRunsMillis: 60000\r\n    minEvictableIdleTimeMillis: 300000\r\n    validationQuery: SELECT 1 FROM DUAL','cc14c442813b1adaaaa31660c0d1233f','2022-01-26 15:40:42','2022-01-26 07:40:42',NULL,'0:0:0:0:0:0:0:1','U',''),(0,17,'auth-server-prod.yml','DEFAULT_GROUP','','server:\r\n  port: 7001\r\n  servlet:\r\n    context-path: /auth #  localhost:7001/auth\r\n\r\nspring:\r\n  # 数据源配置\r\n  datasource:\r\n    username: root\r\n    password: 1qaz2wsx!\r\n    url: jdbc:mysql://127.0.0.1:3306/mxg_blog_auth?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true\r\n    #mysql8版本以上驱动包指定新的驱动类\r\n    driver-class-name: com.mysql.cj.jdbc.Driver\r\n    #   数据源其他配置, 在 DruidConfig配置类中手动绑定\r\n    initialSize: 8\r\n    minIdle: 5\r\n    maxActive: 20\r\n    maxWait: 60000\r\n    timeBetweenEvictionRunsMillis: 60000\r\n    minEvictableIdleTimeMillis: 300000\r\n    validationQuery: SELECT 1 FROM DUAL','cc14c442813b1adaaaa31660c0d1233f','2022-01-26 15:41:04','2022-01-26 07:41:05',NULL,'0:0:0:0:0:0:0:1','I',''),(11,18,'auth-server-dev.yml','DEFAULT_GROUP','','server:\n  port: 7001\n  servlet:\n    context-path: /auth #  localhost:7001/auth\n\nspring:\n  # 数据源配置\n  datasource:\n    username: root\n    password: 1qaz2wsx!\n    url: jdbc:mysql://127.0.0.1:3306/mxg_blog_auth?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true\n    #mysql8版本以上驱动包指定新的驱动类\n    driver-class-name: com.mysql.cj.jdbc.Driver\n    #   数据源其他配置, 在 DruidConfig配置类中手动绑定\n    initialSize: 8\n    minIdle: 5\n    maxActive: 20\n    maxWait: 60000\n    timeBetweenEvictionRunsMillis: 60000\n    minEvictableIdleTimeMillis: 300000\n    validationQuery: SELECT 1 FROM DUAL','15e187be1c21ab2ecfd2503d4c1335db','2022-01-26 17:24:30','2022-01-26 09:24:30',NULL,'0:0:0:0:0:0:0:1','U',''),(12,19,'auth-server-test.yml','DEFAULT_GROUP','','server:\n  port: 7001\n  servlet:\n    context-path: /auth #  localhost:7001/auth\n\nspring:\n  # 数据源配置\n  datasource:\n    username: root\n    password: 1qaz2wsx!\n    url: jdbc:mysql://127.0.0.1:3306/mxg_blog_auth?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true\n    #mysql8版本以上驱动包指定新的驱动类\n    driver-class-name: com.mysql.cj.jdbc.Driver\n    #   数据源其他配置, 在 DruidConfig配置类中手动绑定\n    initialSize: 8\n    minIdle: 5\n    maxActive: 20\n    maxWait: 60000\n    timeBetweenEvictionRunsMillis: 60000\n    minEvictableIdleTimeMillis: 300000\n    validationQuery: SELECT 1 FROM DUAL','15e187be1c21ab2ecfd2503d4c1335db','2022-01-26 17:24:53','2022-01-26 09:24:53',NULL,'0:0:0:0:0:0:0:1','U',''),(16,20,'auth-server-prod.yml','DEFAULT_GROUP','','server:\r\n  port: 7001\r\n  servlet:\r\n    context-path: /auth #  localhost:7001/auth\r\n\r\nspring:\r\n  # 数据源配置\r\n  datasource:\r\n    username: root\r\n    password: 1qaz2wsx!\r\n    url: jdbc:mysql://127.0.0.1:3306/mxg_blog_auth?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true\r\n    #mysql8版本以上驱动包指定新的驱动类\r\n    driver-class-name: com.mysql.cj.jdbc.Driver\r\n    #   数据源其他配置, 在 DruidConfig配置类中手动绑定\r\n    initialSize: 8\r\n    minIdle: 5\r\n    maxActive: 20\r\n    maxWait: 60000\r\n    timeBetweenEvictionRunsMillis: 60000\r\n    minEvictableIdleTimeMillis: 300000\r\n    validationQuery: SELECT 1 FROM DUAL','cc14c442813b1adaaaa31660c0d1233f','2022-01-26 17:25:02','2022-01-26 09:25:02',NULL,'0:0:0:0:0:0:0:1','U',''),(0,21,'gateway-server-dev.yml','DEFAULT_GROUP','','server:\r\n  port: 6001\r\n\r\nspring:\r\n  application:\r\n    name: gateway-server # 应用名\r\n    redis:\r\n      host: localhost # Redis服务器地址\r\n      port: 6379 # Redis服务器连接端口\r\n      # Redis服务器连接密码（默认为空），注释放到上面来，不然控制台可能会一直打印日志\r\n      password:\r\n  cloud:\r\n    nacos:\r\n      discovery:\r\n        server-addr: 127.0.0.1:8848 # 注册中心地址\r\n    gateway:\r\n      #      discovery:\r\n      #        locator:\r\n      #          # true 开启使用服务名称调用目标服务\r\n      #          enabled: true\r\n      # 路由（routes：路由，它由唯一标识（ID）、目标服务地址（uri）\r\n      # 、一组断言（predicates）和一组过滤器组成（filters）。filters 不是必需参数。）\r\n      routes: # List类型\r\n        # id：路由标识，具有唯一性\r\n        - id: blog-article\r\n          # 目标服务地址（uri：地址，请求转发后的地址\r\n          #uri: http://localhost:8001\r\n          uri: lb://article-server\r\n          # 目标服务地址 lb://目标服务名，会自动从注册中心获取此服务的ip和端口转发到 article-server 服务处理\r\n          #          uri: lb://article-service\r\n          # 路由条件（predicates：断言，匹配 HTTP 请求内容）\r\n          predicates:\r\n            # 匹配访问路径，格式为 uri/article/**\r\n            - Path=/article/**\r\n          filters:\r\n            #代理转发时去掉路径位数,发送请求 uri/str/article，/str 部分会被下面的过滤器给截取掉\r\n            #- StripPrefix=1\r\n            - name: RequestRateLimiter\r\n              args:\r\n                #限流过滤器的bean名称\r\n                key-resolver: \"#{@uriKeyResolver}\"\r\n                #希望允许用户每秒执行多少个请求，令牌桶的填充速率\r\n                redis-rate-limiter.replenishRate: 2\r\n                #允许用户在一秒内完成的最大请求数，令牌桶的最大容量\r\n                redis-rate-limiter.burstCapacity: 6\r\n\r\n        - id: blog-question # 问答微服务\r\n          #目标服务地址 lb://目标服务名，会自动从注册中心获取此服务的ip和端口转发到 question-server 服务处理\r\n          uri: lb://question-server\r\n          predicates:\r\n            - Path=/question/**\r\n          filters:\r\n            #代理转发时去掉路径位数,发送请求 uri/str/article，/str 部分会被下面的过滤器给截取掉\r\n            #- StripPrefix=1\r\n            - name: RequestRateLimiter\r\n              args:\r\n                #限流过滤器的bean名称\r\n                key-resolver: \"#{@uriKeyResolver}\"\r\n                #希望允许用户每秒执行多少个请求，令牌桶的填充速率\r\n                redis-rate-limiter.replenishRate: 2\r\n                #允许用户在一秒内完成的最大请求数，令牌桶的最大容量\r\n                redis-rate-limiter.burstCapacity: 6\r\n\r\n        - id: blog-system # 系统微服务\r\n          uri: lb://system-server\r\n          predicates:\r\n            - Path=/system/**\r\n          filters:\r\n            #代理转发时去掉路径位数,发送请求 uri/str/article，/str 部分会被下面的过滤器给截取掉\r\n            #- StripPrefix=1\r\n            - name: RequestRateLimiter\r\n              args:\r\n                #限流过滤器的bean名称\r\n                key-resolver: \"#{@uriKeyResolver}\"\r\n                #希望允许用户每秒执行多少个请求，令牌桶的填充速率\r\n                redis-rate-limiter.replenishRate: 2\r\n                #允许用户在一秒内完成的最大请求数，令牌桶的最大容量\r\n                redis-rate-limiter.burstCapacity: 6\r\n\r\n        - id: blog-auth # 认证服务器\r\n          uri: lb://auth-server\r\n          predicates:\r\n            - Path=/auth/**\r\n          filters:\r\n            #代理转发时去掉路径位数,发送请求 uri/str/article，/str 部分会被下面的过滤器给截取掉\r\n            #- StripPrefix=1\r\n            - name: RequestRateLimiter\r\n              args:\r\n                #限流过滤器的bean名称\r\n                key-resolver: \"#{@uriKeyResolver}\"\r\n                #希望允许用户每秒执行多少个请求，令牌桶的填充速率\r\n                redis-rate-limiter.replenishRate: 2\r\n                #允许用户在一秒内完成的最大请求数，令牌桶的最大容量\r\n                redis-rate-limiter.burstCapacity: 6','4815d8b958567eb90826527d4b3892c5','2022-01-27 17:33:42','2022-01-27 09:33:43',NULL,'0:0:0:0:0:0:0:1','I',''),(0,22,'gateway-server-test.yml','DEFAULT_GROUP','','server:\r\n  port: 6001\r\n\r\nspring:\r\n  application:\r\n    name: gateway-server # 应用名\r\n    redis:\r\n      host: localhost # Redis服务器地址\r\n      port: 6379 # Redis服务器连接端口\r\n      # Redis服务器连接密码（默认为空），注释放到上面来，不然控制台可能会一直打印日志\r\n      password:\r\n  cloud:\r\n    nacos:\r\n      discovery:\r\n        server-addr: 127.0.0.1:8848 # 注册中心地址\r\n    gateway:\r\n      #      discovery:\r\n      #        locator:\r\n      #          # true 开启使用服务名称调用目标服务\r\n      #          enabled: true\r\n      # 路由（routes：路由，它由唯一标识（ID）、目标服务地址（uri）\r\n      # 、一组断言（predicates）和一组过滤器组成（filters）。filters 不是必需参数。）\r\n      routes: # List类型\r\n        # id：路由标识，具有唯一性\r\n        - id: blog-article\r\n          # 目标服务地址（uri：地址，请求转发后的地址\r\n          #uri: http://localhost:8001\r\n          uri: lb://article-server\r\n          # 目标服务地址 lb://目标服务名，会自动从注册中心获取此服务的ip和端口转发到 article-server 服务处理\r\n          #          uri: lb://article-service\r\n          # 路由条件（predicates：断言，匹配 HTTP 请求内容）\r\n          predicates:\r\n            # 匹配访问路径，格式为 uri/article/**\r\n            - Path=/article/**\r\n          filters:\r\n            #代理转发时去掉路径位数,发送请求 uri/str/article，/str 部分会被下面的过滤器给截取掉\r\n            #- StripPrefix=1\r\n            - name: RequestRateLimiter\r\n              args:\r\n                #限流过滤器的bean名称\r\n                key-resolver: \"#{@uriKeyResolver}\"\r\n                #希望允许用户每秒执行多少个请求，令牌桶的填充速率\r\n                redis-rate-limiter.replenishRate: 2\r\n                #允许用户在一秒内完成的最大请求数，令牌桶的最大容量\r\n                redis-rate-limiter.burstCapacity: 6\r\n\r\n        - id: blog-question # 问答微服务\r\n          #目标服务地址 lb://目标服务名，会自动从注册中心获取此服务的ip和端口转发到 question-server 服务处理\r\n          uri: lb://question-server\r\n          predicates:\r\n            - Path=/question/**\r\n          filters:\r\n            #代理转发时去掉路径位数,发送请求 uri/str/article，/str 部分会被下面的过滤器给截取掉\r\n            #- StripPrefix=1\r\n            - name: RequestRateLimiter\r\n              args:\r\n                #限流过滤器的bean名称\r\n                key-resolver: \"#{@uriKeyResolver}\"\r\n                #希望允许用户每秒执行多少个请求，令牌桶的填充速率\r\n                redis-rate-limiter.replenishRate: 2\r\n                #允许用户在一秒内完成的最大请求数，令牌桶的最大容量\r\n                redis-rate-limiter.burstCapacity: 6\r\n\r\n        - id: blog-system # 系统微服务\r\n          uri: lb://system-server\r\n          predicates:\r\n            - Path=/system/**\r\n          filters:\r\n            #代理转发时去掉路径位数,发送请求 uri/str/article，/str 部分会被下面的过滤器给截取掉\r\n            #- StripPrefix=1\r\n            - name: RequestRateLimiter\r\n              args:\r\n                #限流过滤器的bean名称\r\n                key-resolver: \"#{@uriKeyResolver}\"\r\n                #希望允许用户每秒执行多少个请求，令牌桶的填充速率\r\n                redis-rate-limiter.replenishRate: 2\r\n                #允许用户在一秒内完成的最大请求数，令牌桶的最大容量\r\n                redis-rate-limiter.burstCapacity: 6\r\n\r\n        - id: blog-auth # 认证服务器\r\n          uri: lb://auth-server\r\n          predicates:\r\n            - Path=/auth/**\r\n          filters:\r\n            #代理转发时去掉路径位数,发送请求 uri/str/article，/str 部分会被下面的过滤器给截取掉\r\n            #- StripPrefix=1\r\n            - name: RequestRateLimiter\r\n              args:\r\n                #限流过滤器的bean名称\r\n                key-resolver: \"#{@uriKeyResolver}\"\r\n                #希望允许用户每秒执行多少个请求，令牌桶的填充速率\r\n                redis-rate-limiter.replenishRate: 2\r\n                #允许用户在一秒内完成的最大请求数，令牌桶的最大容量\r\n                redis-rate-limiter.burstCapacity: 6','4815d8b958567eb90826527d4b3892c5','2022-01-27 17:34:18','2022-01-27 09:34:18',NULL,'0:0:0:0:0:0:0:1','I',''),(0,23,'gateway-server-prod.yml','DEFAULT_GROUP','','server:\r\n  port: 6001\r\n\r\nspring:\r\n  application:\r\n    name: gateway-server # 应用名\r\n    redis:\r\n      host: localhost # Redis服务器地址\r\n      port: 6379 # Redis服务器连接端口\r\n      # Redis服务器连接密码（默认为空），注释放到上面来，不然控制台可能会一直打印日志\r\n      password:\r\n  cloud:\r\n    nacos:\r\n      discovery:\r\n        server-addr: 127.0.0.1:8848 # 注册中心地址\r\n    gateway:\r\n      #      discovery:\r\n      #        locator:\r\n      #          # true 开启使用服务名称调用目标服务\r\n      #          enabled: true\r\n      # 路由（routes：路由，它由唯一标识（ID）、目标服务地址（uri）\r\n      # 、一组断言（predicates）和一组过滤器组成（filters）。filters 不是必需参数。）\r\n      routes: # List类型\r\n        # id：路由标识，具有唯一性\r\n        - id: blog-article\r\n          # 目标服务地址（uri：地址，请求转发后的地址\r\n          #uri: http://localhost:8001\r\n          uri: lb://article-server\r\n          # 目标服务地址 lb://目标服务名，会自动从注册中心获取此服务的ip和端口转发到 article-server 服务处理\r\n          #          uri: lb://article-service\r\n          # 路由条件（predicates：断言，匹配 HTTP 请求内容）\r\n          predicates:\r\n            # 匹配访问路径，格式为 uri/article/**\r\n            - Path=/article/**\r\n          filters:\r\n            #代理转发时去掉路径位数,发送请求 uri/str/article，/str 部分会被下面的过滤器给截取掉\r\n            #- StripPrefix=1\r\n            - name: RequestRateLimiter\r\n              args:\r\n                #限流过滤器的bean名称\r\n                key-resolver: \"#{@uriKeyResolver}\"\r\n                #希望允许用户每秒执行多少个请求，令牌桶的填充速率\r\n                redis-rate-limiter.replenishRate: 2\r\n                #允许用户在一秒内完成的最大请求数，令牌桶的最大容量\r\n                redis-rate-limiter.burstCapacity: 6\r\n\r\n        - id: blog-question # 问答微服务\r\n          #目标服务地址 lb://目标服务名，会自动从注册中心获取此服务的ip和端口转发到 question-server 服务处理\r\n          uri: lb://question-server\r\n          predicates:\r\n            - Path=/question/**\r\n          filters:\r\n            #代理转发时去掉路径位数,发送请求 uri/str/article，/str 部分会被下面的过滤器给截取掉\r\n            #- StripPrefix=1\r\n            - name: RequestRateLimiter\r\n              args:\r\n                #限流过滤器的bean名称\r\n                key-resolver: \"#{@uriKeyResolver}\"\r\n                #希望允许用户每秒执行多少个请求，令牌桶的填充速率\r\n                redis-rate-limiter.replenishRate: 2\r\n                #允许用户在一秒内完成的最大请求数，令牌桶的最大容量\r\n                redis-rate-limiter.burstCapacity: 6\r\n\r\n        - id: blog-system # 系统微服务\r\n          uri: lb://system-server\r\n          predicates:\r\n            - Path=/system/**\r\n          filters:\r\n            #代理转发时去掉路径位数,发送请求 uri/str/article，/str 部分会被下面的过滤器给截取掉\r\n            #- StripPrefix=1\r\n            - name: RequestRateLimiter\r\n              args:\r\n                #限流过滤器的bean名称\r\n                key-resolver: \"#{@uriKeyResolver}\"\r\n                #希望允许用户每秒执行多少个请求，令牌桶的填充速率\r\n                redis-rate-limiter.replenishRate: 2\r\n                #允许用户在一秒内完成的最大请求数，令牌桶的最大容量\r\n                redis-rate-limiter.burstCapacity: 6\r\n\r\n        - id: blog-auth # 认证服务器\r\n          uri: lb://auth-server\r\n          predicates:\r\n            - Path=/auth/**\r\n          filters:\r\n            #代理转发时去掉路径位数,发送请求 uri/str/article，/str 部分会被下面的过滤器给截取掉\r\n            #- StripPrefix=1\r\n            - name: RequestRateLimiter\r\n              args:\r\n                #限流过滤器的bean名称\r\n                key-resolver: \"#{@uriKeyResolver}\"\r\n                #希望允许用户每秒执行多少个请求，令牌桶的填充速率\r\n                redis-rate-limiter.replenishRate: 2\r\n                #允许用户在一秒内完成的最大请求数，令牌桶的最大容量\r\n                redis-rate-limiter.burstCapacity: 6','4815d8b958567eb90826527d4b3892c5','2022-01-27 17:34:56','2022-01-27 09:34:57',NULL,'0:0:0:0:0:0:0:1','I','');
+/*!40000 ALTER TABLE `his_config_info` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `permissions`
+--
+
+DROP TABLE IF EXISTS `permissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `permissions` (
+  `role` varchar(50) NOT NULL,
+  `resource` varchar(255) NOT NULL,
+  `action` varchar(8) NOT NULL,
+  UNIQUE KEY `uk_role_permission` (`role`,`resource`,`action`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `permissions`
+--
+
+LOCK TABLES `permissions` WRITE;
+/*!40000 ALTER TABLE `permissions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `permissions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `roles`
+--
+
+DROP TABLE IF EXISTS `roles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `roles` (
+  `username` varchar(50) NOT NULL,
+  `role` varchar(50) NOT NULL,
+  UNIQUE KEY `idx_user_role` (`username`,`role`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `roles`
+--
+
+LOCK TABLES `roles` WRITE;
+/*!40000 ALTER TABLE `roles` DISABLE KEYS */;
+INSERT INTO `roles` VALUES ('nacos','ROLE_ADMIN');
+/*!40000 ALTER TABLE `roles` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tenant_capacity`
+--
+
+DROP TABLE IF EXISTS `tenant_capacity`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tenant_capacity` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `tenant_id` varchar(128) COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT 'Tenant ID',
+  `quota` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '配额，0表示使用默认值',
+  `usage` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '使用量',
+  `max_size` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '单个配置大小上限，单位为字节，0表示使用默认值',
+  `max_aggr_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '聚合子配置最大个数',
+  `max_aggr_size` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '单个聚合数据的子配置大小上限，单位为字节，0表示使用默认值',
+  `max_history_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最大变更历史数量',
+  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_tenant_id` (`tenant_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='租户容量信息表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tenant_capacity`
+--
+
+LOCK TABLES `tenant_capacity` WRITE;
+/*!40000 ALTER TABLE `tenant_capacity` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tenant_capacity` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tenant_info`
+--
+
+DROP TABLE IF EXISTS `tenant_info`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tenant_info` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `kp` varchar(128) COLLATE utf8_bin NOT NULL COMMENT 'kp',
+  `tenant_id` varchar(128) COLLATE utf8_bin DEFAULT '' COMMENT 'tenant_id',
+  `tenant_name` varchar(128) COLLATE utf8_bin DEFAULT '' COMMENT 'tenant_name',
+  `tenant_desc` varchar(256) COLLATE utf8_bin DEFAULT NULL COMMENT 'tenant_desc',
+  `create_source` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT 'create_source',
+  `gmt_create` bigint(20) NOT NULL COMMENT '创建时间',
+  `gmt_modified` bigint(20) NOT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_tenant_info_kptenantid` (`kp`,`tenant_id`),
+  KEY `idx_tenant_id` (`tenant_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='tenant_info';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tenant_info`
+--
+
+LOCK TABLES `tenant_info` WRITE;
+/*!40000 ALTER TABLE `tenant_info` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tenant_info` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users` (
+  `username` varchar(50) NOT NULL,
+  `password` varchar(500) NOT NULL,
+  `enabled` tinyint(1) NOT NULL,
+  PRIMARY KEY (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES ('nacos','$2a$10$EuWPZHzz32dJN7jexM34MOeYirDdFAZm2kuWj7VEOJhhZkDrxfvUu',1);
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2023-04-15 14:15:12

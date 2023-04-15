@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: system-server # 应用名
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848  #nacos服务注册发现
+        group: blog  #使用blog组
+        namespace: blog-local
+      config:
+        server-addr: localhost:8848  #nacos配置中心
+        file-extension: yaml  #配置中心的配置文件格式
+        group: blog  #使用blog组
+        namespace: blog-local  #使用blog-dev名称空间
+      username: nacos
+      password: 1qaz2wsx!
+#  profiles:
+#    active: dev   #默认启动开发环境配置

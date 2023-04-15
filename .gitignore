@@ -1,0 +1,17 @@
+/.idea
+/cherry-blog-api/target/**
+/cherry-blog-api/src/test/**
+/cherry-blog-article/target/**
+/cherry-blog-article/src/test/**
+/cherry-blog-gateway/target/**
+/cherry-blog-gateway/src/test/**
+/cherry-blog-generator/target/**
+/cherry-blog-generator/src/test/**
+/cherry-blog-oauth2/target/**
+/cherry-blog-oauth2/src/test/**
+/cherry-blog-question/target/**
+/cherry-blog-question/src/test/**
+/cherry-blog-system/target/**
+/cherry-blog-system/src/test/**
+/cherry-blog-util/target/**
+/cherry-blog-util/src/test/**
