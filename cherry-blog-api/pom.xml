@@ -45,6 +45,7 @@
             <version>${seata.version}</version>
         </dependency>
 
+
     </dependencies>
 
 </project>

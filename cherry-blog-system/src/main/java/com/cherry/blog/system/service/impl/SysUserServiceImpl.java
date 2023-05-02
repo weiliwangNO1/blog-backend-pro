@@ -13,6 +13,7 @@ import com.cherry.blog.system.req.SysUserUpdatePasswordREQ;
 import com.cherry.blog.system.service.ISysUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cherry.blog.util.base.Result;
+import io.seata.spring.annotation.GlobalTransactional;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,7 +144,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
 
 
-    @Transactional // 开启事务
+    @GlobalTransactional(rollbackFor = Exception.class)  //使用seata事务
     @Override
     public Result update(SysUser sysUser) {
         // 1. 查询原用户信息
