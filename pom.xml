@@ -40,6 +40,10 @@
         <httpclientutil.version>1.0.4</httpclientutil.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.9</java.version>
+        <seata.version>1.3.0</seata.version>
+        <swagger.version>1.9.1.RELEASE</swagger.version>
+        <aliyun.version>3.8.0</aliyun.version>
+        <spring-cloud-alibaba.seata>2.2.0.RELEASE</spring-cloud-alibaba.seata>
     </properties>
 
     <!--依赖声明-->
@@ -81,7 +85,7 @@
             <dependency>
                 <groupId>com.spring4all</groupId>
                 <artifactId>swagger-spring-boot-starter</artifactId>
-                <version>1.9.1.RELEASE</version>
+                <version>${swagger.version}</version>
             </dependency>
 
             <!-- kaptcha 用于图形验证码 -->
@@ -95,7 +99,26 @@
             <dependency>
                 <groupId>com.aliyun.oss</groupId>
                 <artifactId>aliyun-sdk-oss</artifactId>
-                <version>3.8.0</version>
+                <version>${aliyun.version}</version>
+            </dependency>
+
+            <!--seata分布式事务-->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-starter-alibaba-seata</artifactId>
+                <version>2.2.4.RELEASE</version>
+                <!--由于默认自带的版本很低，则需要手动移除，重新导入指定版本的seata -->
+                <exclusions>
+                    <exclusion>
+                        <groupId>io.seata</groupId>
+                        <artifactId>seata-spring-boot-starter</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>io.seata</groupId>
+                <artifactId>seata-spring-boot-starter</artifactId>
+                <version>${seata.version}</version>
             </dependency>
 
             <dependency>

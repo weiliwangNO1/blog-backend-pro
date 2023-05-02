@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
+
 @FeignClient(value = "article-server", path = "/article")
 public interface IFeignArticleController {
 
