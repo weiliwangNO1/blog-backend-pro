@@ -64,7 +64,7 @@ public interface ISysUserService extends IService<SysUser> {
      * 更新用户信息
      * @return
      */
-    Result update(SysUser sysUser);
+    Result update(SysUser sysUser) throws Exception;
 
     /**
      * 统计总用户数

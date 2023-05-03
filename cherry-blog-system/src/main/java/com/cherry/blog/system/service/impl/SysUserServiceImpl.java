@@ -146,7 +146,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @GlobalTransactional(rollbackFor = Exception.class)  //使用seata事务
     @Override
-    public Result update(SysUser sysUser) {
+    public Result update(SysUser sysUser) throws Exception {
         // 1. 查询原用户信息
         SysUser user = baseMapper.selectById(sysUser.getId());
         if(user == null) {
@@ -155,14 +155,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 2. 判断更新的信息中昵称和头像是否被改变
         if( !StringUtils.equals(sysUser.getNickName(), user.getNickName())
                 || !StringUtils.equals(sysUser.getImageUrl(), user.getImageUrl()) ) {
-        // 其中一个不相等，则更新用户信息
-        // 2.1 调用文章微服务接口更新用户信息
+            // 其中一个不相等，则更新用户信息
+            // 2.1 调用文章微服务接口更新用户信息
             UserInfoREQ req =
                     new UserInfoREQ(sysUser.getId(), sysUser.getNickName(),
                             sysUser.getImageUrl());
             feignArticleController.updateUserInfo(req);
-        // 2.2 调用问答微服务接口更新用户信息
+            // 2.2 调用问答微服务接口更新用户信息
             feignQuestionController.updateUserInfo(req);
+            //int num = 1/0;
+            //throw new Exception("主动报错");
         }
         // 3. 更新用户信息表
         sysUser.setUpdateDate(new Date());

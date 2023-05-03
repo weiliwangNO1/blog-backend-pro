@@ -102,7 +102,12 @@ public class SysUserController {
     @ApiOperation("更新用户信息接口")
     @PutMapping // put 方式 /user
     public Result update(@RequestBody SysUser sysUser) {
-        return sysUserService.update(sysUser);
+        try {
+            return sysUserService.update(sysUser);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Result.error("error");
     }
 
     @ApiOperation("统计总用户数接口")
