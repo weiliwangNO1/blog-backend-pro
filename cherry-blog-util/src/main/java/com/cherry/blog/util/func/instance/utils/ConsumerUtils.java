@@ -1,5 +1,10 @@
 package com.cherry.blog.util.func.instance.utils;
 
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+
 /**
  * 自定义函数式接口
  *
