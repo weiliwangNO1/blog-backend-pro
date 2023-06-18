@@ -39,7 +39,7 @@ public class TestDemo {
         consumerTest(teacher);
         functionTest(teacher);
         predicateTest(teacher);
-        SupplierTest(teacher);
+        supplierTest(teacher);
 
     }
 
@@ -70,7 +70,7 @@ public class TestDemo {
     }
 
     //新增chengyang学生信息
-    public static void SupplierTest(Teacher teacher) {
+    public static void supplierTest(Teacher teacher) {
         System.out.println(SupplierInstance.supplier(() -> Student.builder()
                 .studentId(3L)
                 .name("chengyang")
