@@ -12,26 +12,32 @@ import java.util.Set;
  */
 public class SupplierUtils {
 
+    @FunctionalInterface
     public interface SupplierInterface<R> {
         R supplier();
     }
 
+    @FunctionalInterface
     public interface SupplierIntegerInterface<R extends Integer> {
         R supplier();
     }
 
+    @FunctionalInterface
     public interface SupplierStrInterface<R extends String> {
         R supplierStr();
     }
 
+    @FunctionalInterface
     public interface SupplierListInterface<R extends List> {
         R supplierList();
     }
 
+    @FunctionalInterface
     public interface SupplierSetInterface<R extends Set> {
         R supplierSet();
     }
 
+    @FunctionalInterface
     public interface SupplierMapInterface<R extends Map> {
         R supplierMap();
     }
