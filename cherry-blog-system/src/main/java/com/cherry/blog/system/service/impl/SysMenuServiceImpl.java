@@ -29,6 +29,7 @@ import java.util.Map;
  * @since 2022-01-25
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> implements ISysMenuService {
 
     @Override
@@ -87,7 +88,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         return menu;
     }
 
-    @Transactional // 进行事务管理
     @Override
     public Result deleteById(String id) {
         //删除当前资源

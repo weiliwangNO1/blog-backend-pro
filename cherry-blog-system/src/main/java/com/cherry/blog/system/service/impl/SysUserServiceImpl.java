@@ -157,9 +157,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 || !StringUtils.equals(sysUser.getImageUrl(), user.getImageUrl()) ) {
             // 其中一个不相等，则更新用户信息
             // 2.1 调用文章微服务接口更新用户信息
-            UserInfoREQ req =
-                    new UserInfoREQ(sysUser.getId(), sysUser.getNickName(),
-                            sysUser.getImageUrl());
+            UserInfoREQ req = UserInfoREQ.builder()
+                    .userId(sysUser.getId())
+                    .nickName(sysUser.getNickName())
+                    .userImage(sysUser.getImageUrl())
+                    .build();
             feignArticleController.updateUserInfo(req);
             // 2.2 调用问答微服务接口更新用户信息
             feignQuestionController.updateUserInfo(req);

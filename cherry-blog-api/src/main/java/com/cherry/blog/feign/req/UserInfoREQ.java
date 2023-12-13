@@ -3,11 +3,15 @@ package com.cherry.blog.feign.req;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
 @Data
+@Builder
+@NoArgsConstructor
 @AllArgsConstructor // 有参构造器
 @ApiModel("更新用户信息请求类")
 public class UserInfoREQ implements Serializable {
