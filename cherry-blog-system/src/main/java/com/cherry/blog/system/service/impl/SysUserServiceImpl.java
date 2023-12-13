@@ -143,8 +143,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
 
-
-    @GlobalTransactional(rollbackFor = Exception.class)  //使用seata事务
+    /**
+     * 使用seata事务
+     * @param sysUser
+     * @return
+     * @throws Exception
+     */
+    @GlobalTransactional(rollbackFor = Exception.class)
     @Override
     public Result update(SysUser sysUser) throws Exception {
         // 1. 查询原用户信息
