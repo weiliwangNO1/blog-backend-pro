@@ -95,6 +95,13 @@
             <!--<version>3.10.2</version> 父工程已经有版本号-->
         </dependency>
 
+
+        <!--<dependency>
+            <groupId>com.taobao.arthas</groupId>
+            <artifactId>arthas-spring-boot-starter</artifactId>
+            <version>3.6.7</version>
+        </dependency>-->
+
     </dependencies>
 
 </project>
