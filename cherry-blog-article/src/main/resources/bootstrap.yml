@@ -12,6 +12,14 @@ spring:
         file-extension: yaml  #配置中心的配置文件格式
         group: ${cherry.nacos.group}  #使用blog组
         namespace: ${cherry.nacos.namespace}  #使用blog-dev名称空间
+        extension-configs:
+          - data-id: article-server.yaml
+            group: ${cherry.nacos.group}  #使用blog组
+            refresh: false
+          - data-id: application.yaml
+            group: ${cherry.nacos.group}  #使用blog组
+            refresh: true
+
       username: ${cherry.nacos.username}
       password: ${cherry.nacos.password}
 #  profiles:
