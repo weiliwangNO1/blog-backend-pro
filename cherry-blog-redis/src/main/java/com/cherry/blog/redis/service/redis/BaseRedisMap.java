@@ -1,11 +1,11 @@
-package com.cherry.blog.redis.service;
+package com.cherry.blog.redis.service.redis;
 
 /**
  * redisson 接口
  * @author weiliwang
  * @date 2023/12/17
  */
-public interface BaseRedis<K, V> {
+public interface BaseRedisMap<K, V> {
 
     /**
      * 获取redis map表名

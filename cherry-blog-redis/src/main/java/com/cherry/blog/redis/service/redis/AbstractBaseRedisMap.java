@@ -1,15 +1,14 @@
-package com.cherry.blog.redis.service;
+package com.cherry.blog.redis.service.redis;
 
+import com.cherry.blog.redis.service.redis.BaseRedisMap;
 import com.cherry.blog.util.tools.ConstantValue;
 import com.cherry.blog.util.tools.MagicValue;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.bcel.Const;
-import org.redisson.api.RMap;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StopWatch;
 
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Lock;
 
 /**
  * redis map
@@ -17,7 +16,7 @@ import java.util.concurrent.locks.Lock;
  * @date 2023/12/17
  */
 @Slf4j
-public abstract class AbstractBaseRedis<K, V> implements BaseRedis<K, V>{
+public abstract class AbstractBaseRedisMap<K, V> implements BaseRedisMap<K, V> {
 
     @Autowired
     private RedissonClient redissonClient;
@@ -38,14 +37,30 @@ public abstract class AbstractBaseRedis<K, V> implements BaseRedis<K, V>{
     }
 
     /**
-     * 加锁（指定加锁时间）
+     * 加锁（指定加锁时间秒）
      * @param key
      * @param lockTime
      */
     private void lock(K key, Integer lockTime) {
         try {
             log.info("lock. key={}", key);
-            redissonClient.getLock(getLockKey(key)).lock(MagicValue.TEN, TimeUnit.SECONDS);
+            redissonClient.getLock(getLockKey(key)).lock(lockTime, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            log.error("lock error. key={}", key);
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 加锁（指定加锁时间）
+     * @param key
+     * @param lockTime
+     * @param timeUnit
+     */
+    private void lock(K key, Integer lockTime, TimeUnit timeUnit) {
+        try {
+            log.info("lock. key={}", key);
+            redissonClient.getLock(getLockKey(key)).lock(lockTime, timeUnit);
         } catch (Exception e) {
             log.error("lock error. key={}", key);
             e.printStackTrace();
@@ -100,12 +115,32 @@ public abstract class AbstractBaseRedis<K, V> implements BaseRedis<K, V>{
     }
 
     /**
-     * 存放数据
+     * 尝试加锁（指定加锁时间）
+     * @param key
+     * @param lockTime
+     * @param timeUnit
+     * @return
+     */
+    private Boolean tryLock(K key, Integer lockTime, TimeUnit timeUnit) {
+        try {
+            log.info("tryLock. key={}", key);
+            return redissonClient.getLock(getLockKey(key)).tryLock(MagicValue.ONE, lockTime, timeUnit);
+        } catch (Exception e) {
+            log.error("tryLock error. key={}", key);
+            e.printStackTrace();
+            return ConstantValue.FALSE;
+        }
+    }
+
+    /**
+     * 存放数据（建议使用）
      * @param key
      * @param value
      */
     public Boolean putValueTryLock(K key, V value) {
         if(tryLock(key)) {
+            StopWatch stopWatch = new StopWatch("Distributed_Locks_PutValueTryLock");
+            stopWatch.start("PutValueTryLock");
             Boolean tag = ConstantValue.FALSE;
             try {
                 redissonClient.getMap(getMapName()).fastPut(key, value);
@@ -117,6 +152,8 @@ public abstract class AbstractBaseRedis<K, V> implements BaseRedis<K, V>{
                 tag = ConstantValue.FALSE;
             } finally {
                 unlock(key);
+                stopWatch.stop();
+                log.info("putValueTryLock cost time={}ms", stopWatch.getTotalTimeMillis());
             }
             return tag;
         }
@@ -129,15 +166,19 @@ public abstract class AbstractBaseRedis<K, V> implements BaseRedis<K, V>{
      * @param value
      */
     public void putValueLock(K key, V value) {
+        StopWatch stopWatch = new StopWatch("Distributed_Locks_PutValueLock");
+        stopWatch.start("PutValueLock");
         try {
             lock(key);
             redissonClient.getMap(getMapName()).fastPut(key, value);
-            log.info("putValueTryLock. key={}, value={}", key, value);
+            log.info("putValueLock. key={}, value={}", key, value);
         } catch (Exception e) {
-            log.info("putValueTryLock error. key={}, value={}", key, value);
+            log.info("putValueLock error. key={}, value={}", key, value);
             e.printStackTrace();
         } finally {
             unlock(key);
+            stopWatch.stop();
+            log.info("putValueLock cost time={}ms", stopWatch.getTotalTimeMillis());
         }
     }
 
@@ -148,8 +189,12 @@ public abstract class AbstractBaseRedis<K, V> implements BaseRedis<K, V>{
      */
     public V getValue(K key) {
         V value = null;
+        StopWatch stopWatch = new StopWatch("Distributed_Locks_GetValue");
+        stopWatch.start("GetValue");
         try {
             value= (V) redissonClient.getMap(getMapName()).get(key);
+            stopWatch.stop();
+            log.info("getValue cost time={}ms", stopWatch.getTotalTimeMillis());
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -158,12 +203,14 @@ public abstract class AbstractBaseRedis<K, V> implements BaseRedis<K, V>{
     }
 
     /**
-     * 删除数据
+     * 删除数据（建议使用）
      * @param key
      * @return
      */
     public Boolean deleteValueTryLock(K key) {
         if(tryLock(key)) {
+            StopWatch stopWatch = new StopWatch("Distributed_Locks_DeleteValueTryLock");
+            stopWatch.start("DeleteValueTryLock");
             Boolean tag = ConstantValue.FALSE;
             try {
                 redissonClient.getMap(getMapName()).remove(key);
@@ -175,6 +222,8 @@ public abstract class AbstractBaseRedis<K, V> implements BaseRedis<K, V>{
                 tag = ConstantValue.FALSE;
             } finally {
                 unlock(key);
+                stopWatch.stop();
+                log.info("deleteValueTryLock cost time={}ms", stopWatch.getTotalTimeMillis());
             }
             return tag;
         }
@@ -188,6 +237,8 @@ public abstract class AbstractBaseRedis<K, V> implements BaseRedis<K, V>{
      * @return
      */
     public void deleteValue(K key) {
+        StopWatch stopWatch = new StopWatch("Distributed_Locks_DeleteValue");
+        stopWatch.start("DeleteValue");
         try {
             lock(key);
             redissonClient.getMap(getMapName()).remove(key);
@@ -197,6 +248,8 @@ public abstract class AbstractBaseRedis<K, V> implements BaseRedis<K, V>{
             e.printStackTrace();
         } finally {
             unlock(key);
+            stopWatch.stop();
+            log.info("deleteValue cost time={}ms", stopWatch.getTotalTimeMillis());
         }
     }
 
