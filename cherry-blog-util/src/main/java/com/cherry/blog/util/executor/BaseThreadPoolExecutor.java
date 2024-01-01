@@ -2,10 +2,7 @@ package com.cherry.blog.util.executor;
 
 import com.cherry.blog.util.enums.ThreadPoolExecutorEnum;
 
-import java.util.concurrent.RejectedExecutionHandler;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * 线程池

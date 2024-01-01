@@ -56,7 +56,7 @@ public abstract class AbstractThreadPoolExecutor implements BaseThreadPoolExecut
                 getMaximumPoolSize(),
                 getKeepAliveTime(),
                 getTimeUnit(),
-                new LinkedBlockingQueue<>(getBlockingQueueSize()),
+                new ArrayBlockingQueue<>(getBlockingQueueSize()),
                 new AppointThreadFactory(),
                 getRejectedExecutionHandler());
     }
@@ -73,7 +73,7 @@ public abstract class AbstractThreadPoolExecutor implements BaseThreadPoolExecut
                 maximumPoolSize,
                 getKeepAliveTime(),
                 getTimeUnit(),
-                new LinkedBlockingQueue<>(getBlockingQueueSize()),
+                new ArrayBlockingQueue<>(getBlockingQueueSize()),
                 new AppointThreadFactory(),
                 getRejectedExecutionHandler());
     }
@@ -94,7 +94,7 @@ public abstract class AbstractThreadPoolExecutor implements BaseThreadPoolExecut
                 maximumPoolSize,
                 keepAliveTime,
                 unit,
-                new LinkedBlockingQueue<>(getBlockingQueueSize()),
+                new ArrayBlockingQueue<>(getBlockingQueueSize()),
                 new AppointThreadFactory(),
                 getRejectedExecutionHandler());
     }

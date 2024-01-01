@@ -32,6 +32,7 @@ public class DefaultCoreThreadPools extends AbstractThreadPoolExecutor{
      */
     private static final Integer CORE_SIZE = MagicValue.TWENTY;
 
+
     /**
      * 阻塞队列长度
      */
