@@ -18,6 +18,7 @@
         <module>cherry-blog-gateway</module>
         <module>cherry-blog-redis</module>
         <module>libs/libs-blog-es</module>
+        <module>cherry-blog-data-platform</module>
     </modules>
     <packaging>pom</packaging>
 

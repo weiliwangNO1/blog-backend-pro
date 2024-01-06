@@ -21,4 +21,10 @@ public class ConstantValue implements Serializable {
     public static final String DEFAULT_THREAD_POOL_NAME = "cherry_blog_thread_pool";
     public static final String THREAD = "thread";
 
+    public static final String TRUE_STR = "true";
+    public static final String FALSE_STR = "false";
+    public static final String ES_SET_NETTY_RUNTIME_AVAILABLE_PROCESSORS = "es.set.netty.runtime.available.processors";
+
+    public static final String ELASTICSEARCH_USE_DEFAULT_MODE = "standAlone";
+
 }
