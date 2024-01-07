@@ -1,5 +1,7 @@
 package com.cherry.blog.platform.es.controller;
 
+import com.cherry.blog.es.model.article.Article;
+import com.cherry.blog.es.repo.ArticleElasticSearchRepo;
 import com.cherry.blog.es.service.ElasticsearchService;
 import com.cherry.blog.platform.es.model.EsResponseUtils;
 import com.cherry.blog.util.enums.ResponseCodeEnum;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 
 /**
@@ -27,6 +30,30 @@ public class ElasticsearchController {
 
     @Autowired
     private ElasticsearchService elasticsearchService;
+
+    @Autowired
+    private ArticleElasticSearchRepo articleElasticSearchRepo;
+
+    @PostConstruct
+    public void init() {
+        try {
+            if(!elasticsearchService.existIndex("111222")) {
+                CreateIndexResponse createIndexResponse = elasticsearchService.createIndex("111222");
+                System.out.println(createIndexResponse);
+            }
+            Article article = Article.builder().id("1")
+                    .title("Java")
+                    .language("English")
+                    .author("weili.wang")
+                    .price(1.0F)
+                    .description("weili.wang-Java")
+                    .build();
+            articleElasticSearchRepo.save(article);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * 创建索引
