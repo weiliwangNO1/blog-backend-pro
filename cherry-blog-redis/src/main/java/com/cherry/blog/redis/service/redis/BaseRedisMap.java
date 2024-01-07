@@ -20,4 +20,10 @@ public interface BaseRedisMap<K, V> {
      */
     String getLockKey(K key);
 
+    /**
+     * 设置map-key过期时间
+     * @return
+     */
+    Long getKeyExpireSeconds();
+
 }

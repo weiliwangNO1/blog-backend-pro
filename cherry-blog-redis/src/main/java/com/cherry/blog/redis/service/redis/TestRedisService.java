@@ -30,6 +30,7 @@ public class TestRedisService extends AbstractBaseRedisMap<Integer, User> {
      */
     private static final String TEST_MAP_NAME = "blog_test_map";
 
+
     @Override
     public String getMapName() {
         return TEST_MAP_NAME;
@@ -39,6 +40,7 @@ public class TestRedisService extends AbstractBaseRedisMap<Integer, User> {
     public String getLockKey(Integer key) {
         return TEST_MAP_NAME.concat(ConstantValue.SPLIT_STR1).concat(key.toString());
     }
+
 
     @PostConstruct
     public void initData() {

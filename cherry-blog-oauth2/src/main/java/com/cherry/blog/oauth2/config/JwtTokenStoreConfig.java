@@ -1,5 +1,7 @@
 package com.cherry.blog.oauth2.config;
 
+import com.cherry.blog.redis.service.redis.AuthRedisService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -16,11 +18,14 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * jwt令牌管理
- * @since  2022-1-26
- * @author wwl
+ * @author weili.wang
+ * @date 2024/1/7
  */
 @Configuration
 public class JwtTokenStoreConfig {
+
+    @Autowired
+    private AuthRedisService authRedisService;
 
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
@@ -32,9 +37,6 @@ public class JwtTokenStoreConfig {
         converter.setKeyPair(factory.getKeyPair("oauth2"));
         return converter;
     }
-
-    @Resource
-    private RedisTemplate redisTemplate;
 
     /**
      * 使用redis存储jwt
@@ -52,8 +54,7 @@ public class JwtTokenStoreConfig {
                 if (token.getAdditionalInformation().containsKey("jti")) {
                     String jti = token.getAdditionalInformation().get("jti").toString();
                     // （key，value，有效时间，时间单位秒）
-                    redisTemplate.opsForValue().set(
-                            jti, token.getValue(), token.getExpiresIn(), TimeUnit.SECONDS);
+                    authRedisService.putValueTryLock(jti, token.getValue(), token.getExpiresIn(), TimeUnit.SECONDS);
                 }
                 super.storeAccessToken(token, authentication);
             }
@@ -63,7 +64,7 @@ public class JwtTokenStoreConfig {
                 if (token.getAdditionalInformation().containsKey("jti")) {
                     // 通过 Jwt 的唯一标识 jti 为 Key 删除 redis 中数据
                     String jti = token.getAdditionalInformation().get("jti").toString();
-                    redisTemplate.delete(jti);
+                    authRedisService.deleteValue(jti);
                 }
                 super.removeAccessToken(token);
             }

@@ -4,6 +4,7 @@ import com.cherry.blog.redis.service.redis.BaseRedisMap;
 import com.cherry.blog.util.tools.ConstantValue;
 import com.cherry.blog.util.tools.MagicValue;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RMap;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StopWatch;
@@ -21,6 +22,16 @@ public abstract class AbstractBaseRedisMap<K, V> implements BaseRedisMap<K, V> {
     @Autowired
     private RedissonClient redissonClient;
 
+
+    /**
+     * 默认7天过期
+     */
+    private static Long KEY_EXPIRE_SECONDS = 60*60*24*7L;
+
+    @Override
+    public Long getKeyExpireSeconds() {
+        return KEY_EXPIRE_SECONDS;
+    }
 
     /**
      * 加锁
@@ -143,7 +154,49 @@ public abstract class AbstractBaseRedisMap<K, V> implements BaseRedisMap<K, V> {
             stopWatch.start("PutValueTryLock");
             Boolean tag = ConstantValue.FALSE;
             try {
-                redissonClient.getMap(getMapName()).fastPut(key, value);
+                RMap<K, V> rMap = redissonClient.getMap(getMapName());
+                if(getKeyExpireSeconds() != null || getKeyExpireSeconds() > 0) {
+                    rMap.expire(getKeyExpireSeconds(), TimeUnit.SECONDS);
+                }
+                rMap.fastPut(key, value);
+                log.info("putValueTryLock. key={}, value={}", key, value);
+                tag = ConstantValue.TRUE;
+            } catch (Exception e) {
+                log.info("putValueTryLock error. key={}, value={}", key, value);
+                e.printStackTrace();
+                tag = ConstantValue.FALSE;
+            } finally {
+                unlock(key);
+                stopWatch.stop();
+                log.info("putValueTryLock cost time={}ms", stopWatch.getTotalTimeMillis());
+            }
+            return tag;
+        }
+        return ConstantValue.FALSE;
+    }
+
+    /**
+     * 存放数据（建议使用）
+     * @param key
+     * @param value
+     * @param expireTime
+     * @param timeUnit
+     * @return
+     */
+    public Boolean putValueTryLock(K key, V value, long expireTime, TimeUnit timeUnit) {
+        if(expireTime < 0) {
+            log.warn("putValueTryLock. expireTime not allowed negative={}", expireTime);
+            return ConstantValue.FALSE;
+        }
+        if(tryLock(key)) {
+            StopWatch stopWatch = new StopWatch("Distributed_Locks_PutValueTryLock");
+            stopWatch.start("PutValueTryLock");
+            Boolean tag = ConstantValue.FALSE;
+            try {
+                RMap<K, V> rMap = redissonClient.getMap(getMapName());
+                //设置过期时间
+                rMap.expire(expireTime, timeUnit);
+                rMap.fastPut(key, value);
                 log.info("putValueTryLock. key={}, value={}", key, value);
                 tag = ConstantValue.TRUE;
             } catch (Exception e) {
@@ -170,7 +223,41 @@ public abstract class AbstractBaseRedisMap<K, V> implements BaseRedisMap<K, V> {
         stopWatch.start("PutValueLock");
         try {
             lock(key);
-            redissonClient.getMap(getMapName()).fastPut(key, value);
+            RMap<K, V> rMap = redissonClient.getMap(getMapName());
+            if(getKeyExpireSeconds() != null || getKeyExpireSeconds() > 0) {
+                rMap.expire(getKeyExpireSeconds(), TimeUnit.SECONDS);
+            }
+            rMap.fastPut(key, value);
+            log.info("putValueLock. key={}, value={}", key, value);
+        } catch (Exception e) {
+            log.info("putValueLock error. key={}, value={}", key, value);
+            e.printStackTrace();
+        } finally {
+            unlock(key);
+            stopWatch.stop();
+            log.info("putValueLock cost time={}ms", stopWatch.getTotalTimeMillis());
+        }
+    }
+
+    /**
+     * 存放数据
+     * @param key
+     * @param value
+     * @param expireTime
+     * @param timeUnit
+     */
+    public void putValueLock(K key, V value, long expireTime, TimeUnit timeUnit) {
+        if(expireTime < 0) {
+            log.warn("putValueLock. expireTime not allowed negative={}", expireTime);
+            return ;
+        }
+        StopWatch stopWatch = new StopWatch("Distributed_Locks_PutValueLock");
+        stopWatch.start("PutValueLock");
+        try {
+            lock(key);
+            RMap<K, V> rMap = redissonClient.getMap(getMapName());
+            rMap.expire(expireTime, timeUnit);
+            rMap.fastPut(key, value);
             log.info("putValueLock. key={}, value={}", key, value);
         } catch (Exception e) {
             log.info("putValueLock error. key={}, value={}", key, value);
