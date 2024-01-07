@@ -47,6 +47,7 @@
         <swagger.version>1.9.1.RELEASE</swagger.version>
         <aliyun.version>3.8.0</aliyun.version>
         <spring-cloud-alibaba.seata.version>2.2.6.RELEASE</spring-cloud-alibaba.seata.version>
+        <commons-lang.version>2.6</commons-lang.version>
     </properties>
 
     <!--依赖声明-->
@@ -153,6 +154,13 @@
                 <artifactId>commons-io</artifactId>
                 <version>${commons-io.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>commons-lang</groupId>
+                <artifactId>commons-lang</artifactId>
+                <version>${commons-lang.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

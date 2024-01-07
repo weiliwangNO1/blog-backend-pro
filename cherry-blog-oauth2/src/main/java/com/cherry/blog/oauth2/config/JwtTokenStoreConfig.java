@@ -33,7 +33,7 @@ public class JwtTokenStoreConfig {
         return converter;
     }
 
-    @Resource // 不要少了
+    @Resource
     private RedisTemplate redisTemplate;
 
     /**
@@ -42,8 +42,8 @@ public class JwtTokenStoreConfig {
      */
     @Bean
     public TokenStore tokenStore() {
-        // Jwt管理令牌
-        return new JwtTokenStore(jwtAccessTokenConverter()) { // JwtTokenStore匿名类中重写方法
+        // Jwt管理令牌  JwtTokenStore匿名类中重写方法
+        return new JwtTokenStore(jwtAccessTokenConverter()) {
             // 存储到redis ++++++++++
             @Override
             public void storeAccessToken(OAuth2AccessToken token, OAuth2Authentication
@@ -67,7 +67,7 @@ public class JwtTokenStoreConfig {
                 }
                 super.removeAccessToken(token);
             }
-        }; // 不要少了分号
+        };
     }
 
 }

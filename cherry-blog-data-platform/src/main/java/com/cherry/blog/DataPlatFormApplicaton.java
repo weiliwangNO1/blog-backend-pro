@@ -1,4 +1,4 @@
-package com.cherry.blog.es;
+package com.cherry.blog;
 
 import com.cherry.blog.util.tools.ConstantValue;
 import com.spring4all.swagger.EnableSwagger2Doc;

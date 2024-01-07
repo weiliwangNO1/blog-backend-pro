@@ -33,7 +33,7 @@ public class StandAloneEsMode {
     private Integer port;
 
     /**
-     * es方案
+     * es通信协议
      */
     private String scheme;
 

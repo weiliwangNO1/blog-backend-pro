@@ -49,10 +49,10 @@ public class ElasticsearchConfig {
         }else {
             //集群模式
             RestHighLevelClient highLevelClient = new RestHighLevelClient(
-                    RestClient.builder(new HttpHost(standAloneEsMode.getHost(), standAloneEsMode.getPort(), standAloneEsMode.getScheme()))
+                    RestClient.builder(new HttpHost(clusterEsMode.getHost(), clusterEsMode.getPort(), clusterEsMode.getScheme()))
                             .setRequestConfigCallback(requestConfigBuilder -> {
-                                return requestConfigBuilder.setConnectTimeout(standAloneEsMode.getConnectTimeout())
-                                        .setSocketTimeout(standAloneEsMode.getSocketTimeout());
+                                return requestConfigBuilder.setConnectTimeout(clusterEsMode.getConnectTimeout())
+                                        .setSocketTimeout(clusterEsMode.getSocketTimeout());
                             }));
             return highLevelClient;
         }
