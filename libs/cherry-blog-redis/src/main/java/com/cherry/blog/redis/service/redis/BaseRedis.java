@@ -1,17 +1,12 @@
 package com.cherry.blog.redis.service.redis;
 
 /**
- * redisson 接口
- * @author weiliwang
- * @date 2023/12/17
+ * redis服务
+ * @author weili.wang
+ * @version 1.0
+ * @date 2024/3/9 20:45
  */
-public interface BaseRedisMap<K, V> {
-
-    /**
-     * 获取redis map表名
-     * @return
-     */
-    String getMapName();
+public interface BaseRedis<K, V> {
 
     /**
      * 获取redis lock

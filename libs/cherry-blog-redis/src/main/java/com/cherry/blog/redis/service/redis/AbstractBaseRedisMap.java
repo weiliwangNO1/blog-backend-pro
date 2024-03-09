@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
  * @date 2023/12/17
  */
 @Slf4j
-public abstract class AbstractBaseRedisMap<K, V> implements BaseRedisMap<K, V> {
+public abstract class AbstractBaseRedisMap<K, V> extends AbstractBaseHotKeyRedis<K, V> implements BaseRedisMap<K, V> {
 
     @Autowired
     private RedissonClient redissonClient;
@@ -159,6 +159,8 @@ public abstract class AbstractBaseRedisMap<K, V> implements BaseRedisMap<K, V> {
                     rMap.expire(getKeyExpireSeconds(), TimeUnit.SECONDS);
                 }
                 rMap.fastPut(key, value);
+                statisticsRedisHotKey(getMapName());
+                statisticsRedisValueHotKey(getMapName(), key);
                 log.info("putValueTryLock. key={}, value={}", key, value);
                 tag = ConstantValue.TRUE;
             } catch (Exception e) {
@@ -339,5 +341,7 @@ public abstract class AbstractBaseRedisMap<K, V> implements BaseRedisMap<K, V> {
             log.info("deleteValue cost time={}ms", stopWatch.getTotalTimeMillis());
         }
     }
+
+
 
 }

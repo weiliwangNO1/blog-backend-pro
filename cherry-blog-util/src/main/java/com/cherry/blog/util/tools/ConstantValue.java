@@ -17,6 +17,7 @@ public class ConstantValue implements Serializable {
     public static final String SLAVE = "SLAVE";
     public static final String SPLIT_STR1 = "-";
     public static final String SPLIT_STR2 = "_";
+    public static final String COLON = ":";
     public static final String LOADBALANCER = "org.redisson.connection.balancer.RoundRobinLoadBalancer";
     public static final String DEFAULT_THREAD_POOL_NAME = "cherry_blog_thread_pool";
     public static final String THREAD = "thread";
