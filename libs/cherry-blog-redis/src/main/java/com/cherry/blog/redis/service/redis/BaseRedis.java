@@ -16,7 +16,7 @@ public interface BaseRedis<K, V> {
     String getLockKey(K key);
 
     /**
-     * 设置map-key过期时间
+     * 设置过期时间
      * @return
      */
     Long getKeyExpireSeconds();

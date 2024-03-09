@@ -199,6 +199,8 @@ public abstract class AbstractBaseRedisMap<K, V> extends AbstractBaseHotKeyRedis
                 //设置过期时间
                 rMap.expire(expireTime, timeUnit);
                 rMap.fastPut(key, value);
+                statisticsRedisHotKey(getMapName());
+                statisticsRedisValueHotKey(getMapName(), key);
                 log.info("putValueTryLock. key={}, value={}", key, value);
                 tag = ConstantValue.TRUE;
             } catch (Exception e) {
@@ -230,6 +232,8 @@ public abstract class AbstractBaseRedisMap<K, V> extends AbstractBaseHotKeyRedis
                 rMap.expire(getKeyExpireSeconds(), TimeUnit.SECONDS);
             }
             rMap.fastPut(key, value);
+            statisticsRedisHotKey(getMapName());
+            statisticsRedisValueHotKey(getMapName(), key);
             log.info("putValueLock. key={}, value={}", key, value);
         } catch (Exception e) {
             log.info("putValueLock error. key={}, value={}", key, value);
@@ -260,6 +264,8 @@ public abstract class AbstractBaseRedisMap<K, V> extends AbstractBaseHotKeyRedis
             RMap<K, V> rMap = redissonClient.getMap(getMapName());
             rMap.expire(expireTime, timeUnit);
             rMap.fastPut(key, value);
+            statisticsRedisHotKey(getMapName());
+            statisticsRedisValueHotKey(getMapName(), key);
             log.info("putValueLock. key={}, value={}", key, value);
         } catch (Exception e) {
             log.info("putValueLock error. key={}, value={}", key, value);
@@ -282,6 +288,8 @@ public abstract class AbstractBaseRedisMap<K, V> extends AbstractBaseHotKeyRedis
         stopWatch.start("GetValue");
         try {
             value= (V) redissonClient.getMap(getMapName()).get(key);
+            statisticsRedisHotKey(getMapName());
+            statisticsRedisValueHotKey(getMapName(), key);
             stopWatch.stop();
             log.info("getValue cost time={}ms", stopWatch.getTotalTimeMillis());
         } catch (Exception e) {
@@ -303,6 +311,8 @@ public abstract class AbstractBaseRedisMap<K, V> extends AbstractBaseHotKeyRedis
             Boolean tag = ConstantValue.FALSE;
             try {
                 redissonClient.getMap(getMapName()).remove(key);
+                statisticsRedisHotKey(getMapName());
+                statisticsRedisValueHotKey(getMapName(), key);
                 log.info("deleteValueTryLock. key={}", key);
                 tag = ConstantValue.TRUE;
             } catch (Exception e) {
@@ -331,6 +341,8 @@ public abstract class AbstractBaseRedisMap<K, V> extends AbstractBaseHotKeyRedis
         try {
             lock(key);
             redissonClient.getMap(getMapName()).remove(key);
+            statisticsRedisHotKey(getMapName());
+            statisticsRedisValueHotKey(getMapName(), key);
             log.info("deleteValue. key={}", key);
         } catch (Exception e) {
             log.info("deleteValue error. key={}", key);
