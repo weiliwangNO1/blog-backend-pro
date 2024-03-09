@@ -24,9 +24,9 @@ public abstract class AbstractBaseRedisMap<K, V> extends AbstractBaseHotKeyRedis
 
 
     /**
-     * 默认7天过期
+     * 默认30天过期
      */
-    private static Long KEY_EXPIRE_SECONDS = 60*60*24*7L;
+    private static Long KEY_EXPIRE_SECONDS = 60*60*24*30L;
 
     @Override
     public Long getKeyExpireSeconds() {

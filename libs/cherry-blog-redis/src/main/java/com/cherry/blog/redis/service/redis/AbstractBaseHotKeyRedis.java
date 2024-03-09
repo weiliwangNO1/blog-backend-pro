@@ -6,6 +6,8 @@ import org.redisson.api.RedissonClient;
 import org.redisson.codec.JsonJacksonCodec;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author weili.wang
  * @version 1.0
@@ -15,6 +17,11 @@ public abstract class AbstractBaseHotKeyRedis<K, V> implements BaseRedis<K, V> {
 
     @Autowired
     private RedissonClient redissonClient;
+
+    /**
+     * 默认360天过期
+     */
+    private static Long KEY_EXPIRE_SECONDS = 60*60*24*360L;
 
     /**
      * redis热key统计
@@ -35,6 +42,11 @@ public abstract class AbstractBaseHotKeyRedis<K, V> implements BaseRedis<K, V> {
         jsonJacksonCodec = new JsonJacksonCodec();
     }
 
+    @Override
+    public Long getKeyExpireSeconds() {
+        return KEY_EXPIRE_SECONDS;
+    }
+
     /**
      * redis热key统计（表访问频次）
      * @param: redisName
@@ -44,6 +56,7 @@ public abstract class AbstractBaseHotKeyRedis<K, V> implements BaseRedis<K, V> {
      */
     public void statisticsRedisHotKey(String redisName) {
         RScoredSortedSet<String> scoredSortedSet = redissonClient.getScoredSortedSet(REDIS_HOT_KEY_NAME, jsonJacksonCodec);
+        scoredSortedSet.expire(getKeyExpireSeconds(), TimeUnit.SECONDS);
         Double score = scoredSortedSet.getScore(redisName);
         if(score == null) {
             score =0.0;
@@ -62,6 +75,7 @@ public abstract class AbstractBaseHotKeyRedis<K, V> implements BaseRedis<K, V> {
      */
     public void statisticsRedisValueHotKey(String redisName, K k) {
         RScoredSortedSet<String> scoredSortedSet = redissonClient.getScoredSortedSet(REDIS_HOT_KEY_VALUE, jsonJacksonCodec);
+        scoredSortedSet.expire(getKeyExpireSeconds(), TimeUnit.SECONDS);
         String key = redisName + ConstantValue.COLON + k;
         Double score = scoredSortedSet.getScore(key);
         if(score == null) {
