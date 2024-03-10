@@ -21,6 +21,7 @@ public class MagicValue implements Serializable {
     public static final Integer NINE = 9;
     public static final Integer TEN = 10;
 
+    public static final Integer SIXTEEN = 16;
     public static final Integer TWENTY = 20;
 
     public static final Integer THIRTY_TOW = 32;

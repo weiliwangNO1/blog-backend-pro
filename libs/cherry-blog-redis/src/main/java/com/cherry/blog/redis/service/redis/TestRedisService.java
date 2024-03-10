@@ -6,6 +6,7 @@ import com.cherry.blog.util.executor.DefaultCoreThreadPools;
 import com.cherry.blog.util.tools.ConstantValue;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -24,6 +25,9 @@ public class TestRedisService extends AbstractBaseRedisMap<Integer, User> {
 
     @Autowired
     private DefaultCoreThreadPools defaultCoreThreadPools;
+
+    @Autowired
+    private Environment environment;
 
     /**
      * 测试redis 表名称
@@ -58,6 +62,7 @@ public class TestRedisService extends AbstractBaseRedisMap<Integer, User> {
         putValueTryLock(2, user2);
 
         this.threadPool();
+
     }
 
     /**

@@ -19,6 +19,7 @@
         <module>libs/cherry-blog-redis</module>
         <module>libs/libs-blog-es</module>
         <module>cherry-blog-data-platform</module>
+        <module>libs/cherry-blog-kafka</module>
     </modules>
     <packaging>pom</packaging>
 
